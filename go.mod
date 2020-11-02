@@ -35,8 +35,6 @@ require (
 	github.com/wealdtech/go-eth2-wallet-types/v2 v2.6.0
 )
 
-replace gopkg.in/urfave/cli.v2 => github.com/urfave/cli/v2 v2.1.1
-
 replace github.com/ethereum/go-ethereum => github.com/prysmaticlabs/bazel-go-ethereum v0.0.0-20201016095414-974cbc1dd92e
 
 replace github.com/herumi/bls-eth-go-binary => github.com/herumi/bls-eth-go-binary v0.0.0-20200605082007-3a76b4c6c599
