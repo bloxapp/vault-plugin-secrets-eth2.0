@@ -207,10 +207,10 @@ func (b *backend) pathSignAttestation(ctx context.Context, req *logical.Request,
 
 	// try to lock signature lock, if it fails return error
 	lock := NewDBLock(account.ID(), req.Storage)
+	defer lock.UnLock()
 	if err := lock.Lock(); err != nil {
 		return nil, err
 	}
-	defer lock.UnLock()
 
 	// Decode public key
 	publicKeyBytes, err := hex.DecodeString(publicKey)
@@ -321,10 +321,10 @@ func (b *backend) pathSignProposal(ctx context.Context, req *logical.Request, da
 
 	// try to lock signature lock, if it fails return error
 	lock := NewDBLock(account.ID(), req.Storage)
+	defer lock.UnLock()
 	if err := lock.Lock(); err != nil {
 		return nil, err
 	}
-	defer lock.UnLock()
 
 	// Decode public key
 	publicKeyBytes, err := hex.DecodeString(publicKey)
@@ -425,10 +425,10 @@ func (b *backend) pathSignAggregation(ctx context.Context, req *logical.Request,
 
 	// try to lock signature lock, if it fails return error
 	lock := NewDBLock(account.ID(), req.Storage)
+	defer lock.UnLock()
 	if err := lock.Lock(); err != nil {
 		return nil, err
 	}
-	defer lock.UnLock()
 
 	// Decode public key
 	publicKeyBytes, err := hex.DecodeString(publicKey)

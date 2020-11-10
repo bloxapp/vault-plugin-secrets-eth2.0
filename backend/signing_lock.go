@@ -2,10 +2,16 @@ package backend
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/hashicorp/vault/sdk/logical"
+)
+
+var (
+	// ErrLocked represents the locked error.
+	ErrLocked = errors.New("locked")
 )
 
 // DBLock implements DB slocking mechanism.
@@ -30,16 +36,15 @@ func (lock *DBLock) Lock() error {
 		return err
 	}
 	if locked {
-		return fmt.Errorf("locked")
+		return ErrLocked
 	}
 
 	// add lock to db
-	entry := &logical.StorageEntry{
+	return lock.storage.Put(context.Background(), &logical.StorageEntry{
 		Key:      lock.key(),
 		Value:    []byte("1"),
 		SealWrap: false,
-	}
-	return lock.storage.Put(context.Background(), entry)
+	})
 }
 
 // UnLock unlocks the DB.
@@ -61,10 +66,10 @@ func (lock *DBLock) UnLock() error {
 func (lock *DBLock) IsLocked() (bool, error) {
 	entry, err := lock.storage.Get(context.Background(), lock.key())
 	if err != nil {
-		return true, err
+		return false, err
 	}
 
-	return entry != nil, err
+	return entry != nil, nil
 }
 
 func (lock *DBLock) key() string {
