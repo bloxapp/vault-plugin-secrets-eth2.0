@@ -97,7 +97,7 @@ func (store *HashicorpVaultStore) ListAttestations(key e2types.PublicKey, epochS
 		}
 	}
 
-	return ret, nil
+	return preparedRes, nil
 }
 
 // ListAllAttestations returns all attestation data from the DB
