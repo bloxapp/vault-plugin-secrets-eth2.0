@@ -150,28 +150,27 @@ func (b *backend) pathSlashingStorageBatchRead(ctx context.Context, req *logical
 }
 
 func loadAccountSlashingHistory(storage *store.HashicorpVaultStore, account core.ValidatorAccount) (string, error) {
-	var slashingHistory SlashingHistory
-	var err error
-
 	errs := make([]error, 2)
 	var wg sync.WaitGroup
 
 	// Fetch attestations
+	var attestation []*core.BeaconAttestation
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-
-		if slashingHistory.Attestations, err = storage.ListAllAttestations(account.ValidatorPublicKey()); err != nil {
+		var err error
+		if attestation, err = storage.ListAllAttestations(account.ValidatorPublicKey()); err != nil {
 			errs[0] = errors.Wrap(err, "failed to list attestations data")
 		}
 	}()
 
 	// Fetch proposals
+	var proposals []*core.BeaconBlockHeader
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-
-		if slashingHistory.Proposals, err = storage.ListAllProposals(account.ValidatorPublicKey()); err != nil {
+		var err error
+		if proposals, err = storage.ListAllProposals(account.ValidatorPublicKey()); err != nil {
 			errs[1] = errors.Wrap(err, "failed to list proposals data")
 		}
 	}()
@@ -184,7 +183,10 @@ func loadAccountSlashingHistory(storage *store.HashicorpVaultStore, account core
 		}
 	}
 
-	slashingHistoryEncoded, err := json.Marshal(slashingHistory)
+	slashingHistoryEncoded, err := json.Marshal(SlashingHistory{
+		Attestations: attestation,
+		Proposals:    proposals,
+	})
 	if err != nil {
 		return "", errors.Wrap(err, "failed to marshal slashing history")
 	}
