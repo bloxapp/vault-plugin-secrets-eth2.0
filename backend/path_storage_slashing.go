@@ -183,8 +183,20 @@ func loadAccountSlashingHistory(storage *store.HashicorpVaultStore, account core
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		var err error
-		if attestation, err = storage.ListAllAttestations(account.ValidatorPublicKey()); err != nil {
+
+		latestAttestation, err := storage.RetrieveLatestAttestation(account.ValidatorPublicKey())
+		if err != nil {
+			errs[1] = errors.Wrap(err, "failed to retrieve latest attestation")
+			return
+		}
+
+		fromEpoch := uint64(1)
+		toEpoch := latestAttestation.Target.Epoch
+		if toEpoch > 1000 {
+			fromEpoch = toEpoch - 1000
+		}
+
+		if attestation, err = storage.ListAttestations(account.ValidatorPublicKey(), fromEpoch, toEpoch); err != nil {
 			errs[0] = errors.Wrap(err, "failed to list attestations data")
 		}
 	}()
@@ -194,6 +206,7 @@ func loadAccountSlashingHistory(storage *store.HashicorpVaultStore, account core
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
+
 		var err error
 		if proposals, err = storage.ListAllProposals(account.ValidatorPublicKey()); err != nil {
 			errs[1] = errors.Wrap(err, "failed to list proposals data")
