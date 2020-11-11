@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/hex"
 	"encoding/json"
+	"sync"
 
 	vault "github.com/bloxapp/eth2-key-manager"
 	"github.com/bloxapp/eth2-key-manager/core"
@@ -67,18 +68,36 @@ func (b *backend) pathSlashingStorageBatchUpdate(ctx context.Context, req *logic
 	}
 
 	// Load accounts slashing history
+	errs := make([]error, len(req.Data))
+	var wg sync.WaitGroup
+	var i int
 	for publicKey, data := range req.Data {
-		account, err := wallet.AccountByPublicKey(publicKey)
+		wg.Add(1)
+		go func(i int, publicKey string, data string) {
+			defer wg.Done()
+
+			account, err := wallet.AccountByPublicKey(publicKey)
+			if err != nil {
+				errs[i] = err
+				return
+			}
+
+			// Store slashing data
+			if err := storeAccountSlashingHistory(storage, account, data); err != nil {
+				errs[i] = err
+				return
+			}
+		}(i, publicKey, data.(string))
+		i++
+	}
+	wg.Wait()
+
+	for _, err := range errs {
 		if err != nil {
 			if err == wallet_hd.ErrAccountNotFound {
 				return b.notFoundResponse()
 			}
 
-			return nil, errors.Wrap(err, "failed to retrieve account")
-		}
-
-		// Store slashing data
-		if err := storeAccountSlashingHistory(storage, account, data.(string)); err != nil {
 			return b.prepareErrorResponse(err)
 		}
 	}
@@ -134,14 +153,35 @@ func loadAccountSlashingHistory(storage *store.HashicorpVaultStore, account core
 	var slashingHistory SlashingHistory
 	var err error
 
+	errs := make([]error, 2)
+	var wg sync.WaitGroup
+
 	// Fetch attestations
-	if slashingHistory.Attestations, err = storage.ListAllAttestations(account.ValidatorPublicKey()); err != nil {
-		return "", errors.Wrap(err, "failed to list attestations data")
-	}
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+
+		if slashingHistory.Attestations, err = storage.ListAllAttestations(account.ValidatorPublicKey()); err != nil {
+			errs[0] = errors.Wrap(err, "failed to list attestations data")
+		}
+	}()
 
 	// Fetch proposals
-	if slashingHistory.Proposals, err = storage.ListAllProposals(account.ValidatorPublicKey()); err != nil {
-		return "", errors.Wrap(err, "failed to list proposals data")
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+
+		if slashingHistory.Proposals, err = storage.ListAllProposals(account.ValidatorPublicKey()); err != nil {
+			errs[1] = errors.Wrap(err, "failed to list proposals data")
+		}
+	}()
+
+	wg.Wait()
+
+	for _, err := range errs {
+		if err != nil {
+			return "", err
+		}
 	}
 
 	slashingHistoryEncoded, err := json.Marshal(slashingHistory)
@@ -165,19 +205,54 @@ func storeAccountSlashingHistory(storage *store.HashicorpVaultStore, account cor
 		return errorex.NewErrBadRequest(err.Error())
 	}
 
+	attErrs := make([]error, len(slashingHistory.Attestations))
+	propErrs := make([]error, len(slashingHistory.Proposals))
+
+	var wg sync.WaitGroup
+
 	// Store attestation history
-	for _, attestation := range slashingHistory.Attestations {
-		// Save attestation
-		if err := storage.SaveAttestation(account.ValidatorPublicKey(), attestation); err != nil {
-			return errors.Wrapf(err, "failed to save attestation for slot %d", attestation.Slot)
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+
+		var attWg sync.WaitGroup
+		for i, attestation := range slashingHistory.Attestations {
+			attWg.Add(1)
+			go func(i int, attestation *core.BeaconAttestation) {
+				defer attWg.Done()
+
+				if err := storage.SaveAttestation(account.ValidatorPublicKey(), attestation); err != nil {
+					attErrs[i] = errors.Wrapf(err, "failed to save attestation for slot %d", attestation.Slot)
+				}
+			}(i, attestation)
 		}
-	}
+		attWg.Wait()
+	}()
 
 	// Store proposal history
-	for _, proposal := range slashingHistory.Proposals {
-		// Save proposals
-		if err := storage.SaveProposal(account.ValidatorPublicKey(), proposal); err != nil {
-			return errors.Wrapf(err, "failed to save proposal for slot %d", proposal.Slot)
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+
+		var propWg sync.WaitGroup
+		for i, proposal := range slashingHistory.Proposals {
+			propWg.Add(1)
+			go func(i int, proposal *core.BeaconBlockHeader) {
+				defer propWg.Done()
+
+				if err := storage.SaveProposal(account.ValidatorPublicKey(), proposal); err != nil {
+					propErrs[i] = errors.Wrapf(err, "failed to save proposal for slot %d", proposal.Slot)
+				}
+			}(i, proposal)
+		}
+		propWg.Wait()
+	}()
+
+	wg.Wait()
+
+	for _, err := range append(attErrs, propErrs...) {
+		if err != nil {
+			return err
 		}
 	}
 

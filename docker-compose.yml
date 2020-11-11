@@ -24,21 +24,3 @@ services:
     cap_add:
       - IPC_LOCK
     restart: unless-stopped
-
-  vault-image:
-    image: bloxstaking/key-vault:v0.1.5
-    ports:
-      - 8200:8200
-    volumes:
-      - ./data:/data
-      - ./policies:/policies
-    environment:
-      VAULT_CLIENT_TIMEOUT: "30s"
-      VAULT_EXTERNAL_ADDRESS: "127.0.0.1"
-      UNSEAL: "true"
-      # Genesis times per network
-      TESTNET_GENESIS_TIME: "2020-08-04 13:00:08 UTC"
-      ZINKEN_GENESIS_TIME: "2020-10-12 12:00:13 UTC"
-    cap_add:
-      - IPC_LOCK
-    restart: unless-stopped
