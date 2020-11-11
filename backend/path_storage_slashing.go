@@ -190,7 +190,7 @@ func loadAccountSlashingHistory(storage *store.HashicorpVaultStore, account core
 			return
 		}
 
-		if latestAttestation.Target.Epoch > 1000 {
+		if latestAttestation != nil && latestAttestation.Target != nil && latestAttestation.Target.Epoch > 1000 {
 			from := latestAttestation.Target.Epoch - 1000
 			to := latestAttestation.Target.Epoch
 			if attestation, err = storage.ListAttestations(account.ValidatorPublicKey(), from, to); err != nil {
