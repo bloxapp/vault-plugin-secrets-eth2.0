@@ -190,18 +190,21 @@ func loadAccountSlashingHistory(storage *store.HashicorpVaultStore, account core
 			return
 		}
 
-		fromEpoch := uint64(0)
-		toEpoch := latestAttestation.Target.Epoch - 1
-		if toEpoch > 1000 {
-			fromEpoch = toEpoch - 1000
-		}
+		if latestAttestation.Target.Epoch > 1000 {
+			from := latestAttestation.Target.Epoch - 1000
+			to := latestAttestation.Target.Epoch
+			if attestation, err = storage.ListAttestations(account.ValidatorPublicKey(), from, to); err != nil {
+				errs[0] = errors.Wrap(err, "failed to list attestations data by epochs limit")
+				return
+			}
 
-		if attestation, err = storage.ListAttestations(account.ValidatorPublicKey(), fromEpoch, toEpoch); err != nil {
-			errs[0] = errors.Wrap(err, "failed to list attestations data")
-			return
+			attestation = append(attestation, latestAttestation)
+		} else {
+			if attestation, err = storage.ListAllAttestations(account.ValidatorPublicKey()); err != nil {
+				errs[0] = errors.Wrap(err, "failed to list all attestations data")
+				return
+			}
 		}
-
-		attestation = append(attestation, latestAttestation)
 	}()
 
 	// Fetch proposals
