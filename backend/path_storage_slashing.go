@@ -133,19 +133,44 @@ func (b *backend) pathSlashingStorageBatchRead(ctx context.Context, req *logical
 	}
 
 	// Load accounts slashing history
-	responseData := make(map[string]interface{})
-	for _, account := range wallet.Accounts() {
-		// Load slashing history
-		slashingHistory, err := loadAccountSlashingHistory(storage, account)
-		if err != nil {
-			return nil, errors.Wrap(err, "failed to load slashing history")
-		}
+	accounts := wallet.Accounts()
+	responseData := make([]map[string]interface{}, len(accounts))
+	errs := make([]error, len(accounts))
+	var wg sync.WaitGroup
+	for i, account := range wallet.Accounts() {
+		wg.Add(1)
+		go func(i int, account core.ValidatorAccount) {
+			defer wg.Done()
 
-		responseData[hex.EncodeToString(account.ValidatorPublicKey().Marshal())] = slashingHistory
+			// Load slashing history
+			slashingHistory, err := loadAccountSlashingHistory(storage, account)
+			if err != nil {
+				errs[i] = errors.Wrap(err, "failed to load slashing history")
+				return
+			}
+
+			responseData[i] = map[string]interface{}{
+				hex.EncodeToString(account.ValidatorPublicKey().Marshal()): slashingHistory,
+			}
+		}(i, account)
+	}
+	wg.Wait()
+
+	for _, err := range errs {
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	historyData := make(map[string]interface{})
+	for _, d := range responseData {
+		for pubKey, history := range d {
+			historyData[pubKey] = history
+		}
 	}
 
 	return &logical.Response{
-		Data: responseData,
+		Data: historyData,
 	}, nil
 }
 
