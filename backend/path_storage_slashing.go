@@ -186,7 +186,7 @@ func loadAccountSlashingHistory(storage *store.HashicorpVaultStore, account core
 
 		latestAttestation, err := storage.RetrieveLatestAttestation(account.ValidatorPublicKey())
 		if err != nil {
-			errs[1] = errors.Wrap(err, "failed to retrieve latest attestation")
+			errs[0] = errors.Wrap(err, "failed to retrieve latest attestation")
 			return
 		}
 
