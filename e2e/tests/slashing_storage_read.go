@@ -51,7 +51,7 @@ func (test *SlashingStorageRead) Run(t *testing.T) {
 
 	// Read slashing storage
 	storageBytes, statusCode := setup.ReadSlashingStorage(t, core.TestNetwork)
-	require.Equal(t, http.StatusOK, statusCode)
+	require.Equal(t, http.StatusOK, statusCode, string(storageBytes))
 
 	var slashingHistory slashingHistoryModel
 	err = json.Unmarshal(storageBytes, &slashingHistory)

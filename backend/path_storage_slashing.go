@@ -137,7 +137,7 @@ func (b *backend) pathSlashingStorageBatchRead(ctx context.Context, req *logical
 	responseData := make([]map[string]interface{}, len(accounts))
 	errs := make([]error, len(accounts))
 	var wg sync.WaitGroup
-	for i, account := range wallet.Accounts() {
+	for i, account := range accounts {
 		wg.Add(1)
 		go func(i int, account core.ValidatorAccount) {
 			defer wg.Done()
@@ -190,15 +190,18 @@ func loadAccountSlashingHistory(storage *store.HashicorpVaultStore, account core
 			return
 		}
 
-		fromEpoch := uint64(1)
-		toEpoch := latestAttestation.Target.Epoch
+		fromEpoch := uint64(0)
+		toEpoch := latestAttestation.Target.Epoch - 1
 		if toEpoch > 1000 {
 			fromEpoch = toEpoch - 1000
 		}
 
 		if attestation, err = storage.ListAttestations(account.ValidatorPublicKey(), fromEpoch, toEpoch); err != nil {
 			errs[0] = errors.Wrap(err, "failed to list attestations data")
+			return
 		}
+
+		attestation = append(attestation, latestAttestation)
 	}()
 
 	// Fetch proposals
