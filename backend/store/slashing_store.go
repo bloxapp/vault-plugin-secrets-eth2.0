@@ -90,7 +90,7 @@ func (store *HashicorpVaultStore) ListAttestations(key e2types.PublicKey, epochS
 		}
 	}
 
-	var preparedRes []*core.BeaconAttestation
+	preparedRes := make([]*core.BeaconAttestation, 0)
 	for _, r := range ret {
 		if r != nil {
 			preparedRes = append(preparedRes, r)
@@ -149,7 +149,7 @@ func (store *HashicorpVaultStore) ListAllAttestations(key e2types.PublicKey) ([]
 		}
 	}
 
-	var clearedAttestations []*core.BeaconAttestation
+	clearedAttestations := make([]*core.BeaconAttestation, 0)
 	for _, attestation := range attestations {
 		if attestation != nil {
 			clearedAttestations = append(clearedAttestations, attestation)
@@ -245,7 +245,7 @@ func (store *HashicorpVaultStore) ListAllProposals(key e2types.PublicKey) ([]*co
 		}
 	}
 
-	var clearedProposals []*core.BeaconBlockHeader
+	clearedProposals := make([]*core.BeaconBlockHeader, 0)
 	for _, proposal := range proposals {
 		if proposal != nil {
 			clearedProposals = append(clearedProposals, proposal)
