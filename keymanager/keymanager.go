@@ -9,7 +9,9 @@ import (
 	"net/http"
 
 	ethpb "github.com/prysmaticlabs/ethereumapis/eth/v1alpha1"
+	validatorpb "github.com/prysmaticlabs/prysm/proto/validator/accounts/v2"
 	"github.com/prysmaticlabs/prysm/shared/bls"
+	"github.com/prysmaticlabs/prysm/validator/keymanager"
 	"github.com/sirupsen/logrus"
 
 	"github.com/bloxapp/key-vault/backend"
@@ -18,9 +20,11 @@ import (
 	"github.com/bloxapp/key-vault/utils/httpex"
 )
 
+// To make sure V2 implements keymanager.IKeymanager interface
+var _ keymanager.IKeymanager = &KeyManager{}
+
 // Predefined errors
 var (
-	ErrUnprotectedSigning = NewGenericErrorWithMessage("remote HTTP key manager does not support unprotected signing method")
 	ErrUnsupportedSigning = NewGenericErrorWithMessage("remote HTTP key manager does not support such signing method")
 	ErrNoSuchKey          = NewGenericErrorWithMessage("no such key")
 )
@@ -66,14 +70,36 @@ func NewKeyManager(log *logrus.Entry, opts *Config) (*KeyManager, error) {
 	}, nil
 }
 
-// FetchValidatingKeys implements KeyManager interface.
-func (km *KeyManager) FetchValidatingKeys() ([][48]byte, error) {
+// FetchValidatingPublicKeys implements KeyManager-v2 interface.
+func (km *KeyManager) FetchValidatingPublicKeys(_ context.Context) ([][48]byte, error) {
 	return [][48]byte{km.pubKey}, nil
 }
 
-// Sign implements KeyManager interface.
-func (km *KeyManager) Sign(ctx context.Context, pubKey [48]byte, root [32]byte) (bls.Signature, error) {
-	return nil, ErrUnprotectedSigning
+// Sign implements IKeymanager interface.
+func (km *KeyManager) Sign(_ context.Context, req *validatorpb.SignRequest) (bls.Signature, error) {
+	if bytex.ToBytes48(req.GetPublicKey()) != km.pubKey {
+		return nil, ErrNoSuchKey
+	}
+
+	domain := bytex.ToBytes32(req.GetSignatureDomain())
+	switch data := req.GetObject().(type) {
+	case *validatorpb.SignRequest_Block:
+		return km.SignProposal(km.pubKey, domain, &ethpb.BeaconBlockHeader{
+			Slot:          data.Block.GetSlot(),
+			ProposerIndex: data.Block.GetProposerIndex(),
+			StateRoot:     data.Block.GetStateRoot(),
+			ParentRoot:    data.Block.GetParentRoot(),
+			BodyRoot:      req.GetSigningRoot(),
+		})
+	case *validatorpb.SignRequest_AttestationData:
+		return km.SignAttestation(km.pubKey, domain, data.AttestationData)
+	case *validatorpb.SignRequest_AggregateAttestationAndProof:
+		return km.SignGeneric(km.pubKey, bytex.ToBytes32(req.GetSigningRoot()), domain)
+	case *validatorpb.SignRequest_Slot:
+		return km.SignGeneric(km.pubKey, bytex.ToBytes32(req.GetSigningRoot()), domain)
+	default:
+		return nil, ErrUnsupportedSigning
+	}
 }
 
 // SignGeneric implements ProtectingKeyManager interface.
