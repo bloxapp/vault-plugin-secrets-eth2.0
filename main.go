@@ -31,7 +31,10 @@ func main() {
 	flags.StringVar(&logOpts.Format, "log-format", "", "logs format")
 	flags.StringVar(&logLevels, "log-levels", "", "logs levels separated by comma")
 	flags.StringVar(&logOpts.DSN, "log-dsn", "", "external DSN to send logs")
-	flags.Parse(os.Args[1:]) // Ignore command, strictly parse flags
+	if err := flags.Parse(os.Args[1:]); err != nil {
+		logrus.WithError(err).Fatal("failed to parse flags")
+	}
+
 	logOpts.Levels = strings.Split(logLevels, ",")
 
 	// Init logger for development proposes

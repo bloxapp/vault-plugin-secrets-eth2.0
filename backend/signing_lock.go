@@ -2,11 +2,11 @@ package backend
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/hashicorp/vault/sdk/logical"
+	"github.com/pkg/errors"
 )
 
 var (
@@ -14,7 +14,7 @@ var (
 	ErrLocked = errors.New("locked")
 )
 
-// DBLock implements DB slocking mechanism.
+// DBLock implements DB locking mechanism.
 type DBLock struct {
 	id      uuid.UUID
 	storage logical.Storage
@@ -33,7 +33,7 @@ func (lock *DBLock) Lock() error {
 	// if locked return error
 	locked, err := lock.IsLocked()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "failed to check if it is locked")
 	}
 	if locked {
 		return ErrLocked
@@ -49,10 +49,9 @@ func (lock *DBLock) Lock() error {
 
 // UnLock unlocks the DB.
 func (lock *DBLock) UnLock() error {
-	// check if locked
 	locked, err := lock.IsLocked()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "failed to check if it is locked")
 	}
 	if !locked {
 		return nil

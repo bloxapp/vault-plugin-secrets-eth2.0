@@ -16,7 +16,9 @@ const AccountIndex = 0
 
 // BaseInmemStorage creates the in-memory storage and creates the base account.
 func BaseInmemStorage(t *testing.T) (*in_memory.InMemStore, error) {
-	types.InitBLS()
+	err := types.InitBLS()
+	require.NoError(t, err)
+
 	store := in_memory.NewInMemStore(core.MainNetwork)
 
 	entropy, err := core.GenerateNewEntropy()
