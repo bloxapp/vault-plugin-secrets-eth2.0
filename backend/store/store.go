@@ -6,12 +6,12 @@ import (
 	"fmt"
 
 	"github.com/bloxapp/eth2-key-manager/core"
+	"github.com/bloxapp/eth2-key-manager/encryptor"
 	"github.com/bloxapp/eth2-key-manager/stores/in_memory"
 	"github.com/bloxapp/eth2-key-manager/wallet_hd"
 	"github.com/google/uuid"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/pkg/errors"
-	types "github.com/wealdtech/go-eth2-wallet-types/v2"
 )
 
 // Paths
@@ -28,7 +28,7 @@ type HashicorpVaultStore struct {
 	ctx     context.Context
 	network core.Network
 
-	encryptor          types.Encryptor
+	encryptor          encryptor.Encryptor
 	encryptionPassword []byte
 }
 
@@ -190,7 +190,7 @@ func (store *HashicorpVaultStore) DeleteAccount(accountID uuid.UUID) error {
 }
 
 // SetEncryptor sets the given encryptor. Could be nil value.
-func (store *HashicorpVaultStore) SetEncryptor(encryptor types.Encryptor, password []byte) {
+func (store *HashicorpVaultStore) SetEncryptor(encryptor encryptor.Encryptor, password []byte) {
 	store.encryptor = encryptor
 	store.encryptionPassword = password
 }

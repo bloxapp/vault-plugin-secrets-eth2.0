@@ -8,13 +8,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"testing"
 
 	"github.com/bloxapp/eth2-key-manager/core"
 	"github.com/pborman/uuid"
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/require"
 
 	"github.com/bloxapp/key-vault/e2e/launcher"
@@ -58,7 +58,7 @@ func init() {
 	var err error
 	imageName := "key-vault:" + uuid.New()
 	if dockerLauncher, err = launcher.New(imageName, basePath); err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 }
 

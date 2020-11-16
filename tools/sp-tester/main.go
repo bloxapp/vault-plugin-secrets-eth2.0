@@ -6,10 +6,11 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"sync"
+
+	"github.com/sirupsen/logrus"
 )
 
 var config struct {
@@ -39,7 +40,7 @@ func main() {
 	encoder := json.NewEncoder(os.Stdout)
 	encoder.SetIndent("", "  ")
 	if err := encoder.Encode(config); err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 
 	// Create HTTP client
@@ -53,7 +54,7 @@ func main() {
 	for i := 1; i <= config.ParallelRequest; i++ {
 		cont, err := ioutil.ReadFile(fmt.Sprintf(config.FileFormat, i))
 		if err != nil {
-			log.Fatal(err)
+			logrus.Fatal(err)
 		}
 
 		bodies[i-1] = cont
@@ -71,7 +72,7 @@ func main() {
 				// Prepare request
 				req, err := http.NewRequest(http.MethodPost, targetURL, bytes.NewBuffer(bodies[i]))
 				if err != nil {
-					log.Fatal(err)
+					logrus.Fatal(err)
 				}
 
 				req.Header.Set("Authorization", "Bearer "+config.AuthToken)
@@ -79,17 +80,17 @@ func main() {
 				// Do request
 				resp, err := httpClient.Do(req)
 				if err != nil {
-					log.Fatal(err)
+					logrus.Fatal(err)
 				}
 
 				// Read response body
 				respBody, err := ioutil.ReadAll(resp.Body)
 				if err != nil {
-					log.Println(err)
+					logrus.Println(err)
 				}
 				defer resp.Body.Close()
 
-				fmt.Println(resp.Status, string(respBody))
+				logrus.Println(resp.Status, string(respBody))
 
 				if resp.StatusCode != http.StatusOK {
 					unsuccessful++
@@ -99,9 +100,9 @@ func main() {
 	}
 	wg.Wait()
 
-	fmt.Println("unsuccessful: ", unsuccessful)
+	logrus.Println("unsuccessful: ", unsuccessful)
 }
 
 func runRequest(httpClient *http.Client, targetURL string) {
-	fmt.Println("run request", targetURL)
+	logrus.Println("run request", targetURL)
 }

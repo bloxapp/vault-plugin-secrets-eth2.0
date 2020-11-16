@@ -1,13 +1,13 @@
 package main
 
 import (
-	"log"
 	"os"
 	"strings"
 
 	vault "github.com/bloxapp/eth2-key-manager"
 	"github.com/hashicorp/vault/api"
 	"github.com/hashicorp/vault/sdk/plugin"
+	"github.com/sirupsen/logrus"
 
 	"github.com/bloxapp/key-vault/backend"
 	"github.com/bloxapp/key-vault/utils/logex"
@@ -37,7 +37,7 @@ func main() {
 	// Init logger for development proposes
 	logger, err := logex.Init(logOpts)
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 
 	// Create TLS configuration
@@ -49,6 +49,6 @@ func main() {
 		BackendFactoryFunc: backend.Factory(Version, logger),
 		TLSProviderFunc:    tlsProviderFunc,
 	}); err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 }

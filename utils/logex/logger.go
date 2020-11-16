@@ -2,7 +2,6 @@
 package logex
 
 import (
-	"log"
 	"os"
 
 	"github.com/makasim/sentryhook"
@@ -80,8 +79,6 @@ func Init(opts Options) (*logrus.Logger, error) {
 		// Add Sentry log hook
 		logger.Hooks.Add(sentryhook.New(logLevels))
 	}
-
-	log.SetOutput(logger.Out)
 
 	return logger, nil
 }

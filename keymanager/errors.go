@@ -3,9 +3,9 @@ package keymanager
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 // HTTPRequestError represents an HTTP request error.
@@ -45,7 +45,7 @@ func (e *HTTPRequestError) String() string {
 
 	data, err := json.Marshal(e)
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 	return string(data)
 }
@@ -95,7 +95,7 @@ func (e *GenericError) String() string {
 
 	data, err := json.Marshal(e)
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 	return string(data)
 }

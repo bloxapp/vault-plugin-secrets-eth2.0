@@ -48,7 +48,6 @@ func newBackend(version string, logger *logrus.Logger) *backend {
 		Secrets:     []*framework.Secret{},
 		BackendType: logical.TypeLogical,
 	}
-
 	return b
 }
 
