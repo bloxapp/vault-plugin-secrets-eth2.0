@@ -46,7 +46,7 @@ Security check:
     - blox-infra-stage
   script:
     - curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s v2.5.0
-    - gosec -exclude-dir e2e ./...
+    - ./bin/gosec -exclude-dir e2e ./...
 
 Run tests of the application:
   stage: test
