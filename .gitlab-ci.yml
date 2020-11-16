@@ -98,6 +98,17 @@ Run prod linter:
   only:
     - master
 
+Prod security check:
+  stage: gosec
+  image: golang:1.14-stretch
+  tags:
+    - blox-infra-stage
+  script:
+    - curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s v2.5.0
+    - ./bin/gosec -exclude-dir e2e ./...
+  only:
+    - master
+
 Run prod tests of the application:
   stage: test
   image: golang:1.14-stretch
