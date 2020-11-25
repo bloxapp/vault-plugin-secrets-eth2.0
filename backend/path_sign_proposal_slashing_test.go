@@ -12,7 +12,7 @@ func basicProposalData() map[string]interface{} {
 	return map[string]interface{}{
 		"public_key":    "95087182937f6982ae99f9b06bd116f463f414513032e33a3d175d9662eddf162101fcf6ca2a9fedaded74b8047c5dcf",
 		"domain":        "01000000f071c66c6561d0b939feb15f513a019d99a84bd85635221e3ad42dac",
-		"slot":          284115,
+		"slot":          88,
 		"proposerIndex": 1,
 		"parentRoot":    "7402fdc1ce16d449d637c34a172b349a12b2bae8d6d77e401006594d8057c33d",
 		"stateRoot":     "17959acc370274756fa5e9fdd7e7adf17204f49cc8457e49438c42c4883cbfb0",

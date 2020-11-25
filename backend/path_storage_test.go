@@ -22,7 +22,7 @@ func _byteArray(input string) []byte {
 }
 
 func baseInmemStorage() (*in_memory.InMemStore, uuid.UUID, error) {
-	inMemStore := in_memory.NewInMemStore(core.MainNetwork)
+	inMemStore := in_memory.NewInMemStore(core.PyrmontNetwork)
 
 	// wallet
 	wallet := wallet_hd.NewHDWallet(&core.WalletContext{Storage: inMemStore})

@@ -50,7 +50,7 @@ func (test *ProposalSigning) Run(t *testing.T) {
 
 	// Sign data
 	protector := slashing_protection.NewNormalProtection(in_memory.NewInMemStore(core.PyrmontNetwork))
-	var signer validator_signer.ValidatorSigner = validator_signer.NewSimpleSigner(wallet, protector)
+	var signer validator_signer.ValidatorSigner = validator_signer.NewSimpleSigner(wallet, protector, storage.Network())
 
 	res, err := signer.SignBeaconProposal(test.dataToProposalRequest(t, pubKeyBytes, dataToSign))
 	require.NoError(t, err)

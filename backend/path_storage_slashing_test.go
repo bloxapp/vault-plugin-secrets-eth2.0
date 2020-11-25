@@ -160,7 +160,7 @@ func TestSlashingStorage_Read(t *testing.T) {
 		setupBaseStorage(t, req)
 		newStore, err := store.FromInMemoryStore(ctx, inMemStore, req.Storage)
 		require.NoError(t, err)
-		err = newStore.SaveAttestation(account.ValidatorPublicKey(), attestation)
+		err = newStore.SaveHighestAttestation(account.ValidatorPublicKey(), attestation)
 		require.NoError(t, err)
 		err = newStore.SaveProposal(account.ValidatorPublicKey(), proposal)
 		require.NoError(t, err)
@@ -174,9 +174,9 @@ func TestSlashingStorage_Read(t *testing.T) {
 		var slashingHistory SlashingHistory
 		err = json.Unmarshal(data, &slashingHistory)
 		require.NoError(t, err)
-		require.Len(t, slashingHistory.Attestations, 1)
+		//require.Len(t, slashingHistory.Attestations, 1)
 		require.Len(t, slashingHistory.Proposals, 1)
-		require.EqualValues(t, attestation, slashingHistory.Attestations[0])
+		require.EqualValues(t, attestation, slashingHistory.HighestAttestation)
 		require.EqualValues(t, proposal, slashingHistory.Proposals[0])
 	})
 }

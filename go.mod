@@ -21,6 +21,7 @@ require (
 	github.com/hashicorp/go-rootcerts v1.0.2 // indirect
 	github.com/hashicorp/vault/api v1.0.4
 	github.com/hashicorp/vault/sdk v0.1.13
+	github.com/herumi/bls-eth-go-binary v0.0.0-20201019012252-4b463a10c225
 	github.com/makasim/sentryhook v0.3.0
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/onsi/ginkgo v1.14.1 // indirect

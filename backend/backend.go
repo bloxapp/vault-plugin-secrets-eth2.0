@@ -35,7 +35,7 @@ func newBackend(version string, logger *logrus.Logger) *backend {
 		Paths: framework.PathAppend(
 			versionPaths(b),
 			storagePaths(b),
-			storageSlashingPaths(b),
+			storageSlashingDataPaths(b),
 			accountsPaths(b),
 			signsPaths(b),
 			configPaths(b),

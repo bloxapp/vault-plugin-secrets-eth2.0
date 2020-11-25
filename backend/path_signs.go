@@ -248,7 +248,7 @@ func (b *backend) pathSignAttestation(ctx context.Context, req *logical.Request,
 	}
 
 	protector := slashing_protection.NewNormalProtection(storage)
-	var signer validator_signer.ValidatorSigner = validator_signer.NewSimpleSigner(wallet, protector)
+	var signer validator_signer.ValidatorSigner = validator_signer.NewSimpleSigner(wallet, protector, storage.Network())
 
 	res, err := signer.SignBeaconAttestation(&v1.SignBeaconAttestationRequest{
 		Id:     &v1.SignBeaconAttestationRequest_PublicKey{PublicKey: publicKeyBytes},
@@ -362,7 +362,7 @@ func (b *backend) pathSignProposal(ctx context.Context, req *logical.Request, da
 	}
 
 	protector := slashing_protection.NewNormalProtection(storage)
-	var signer validator_signer.ValidatorSigner = validator_signer.NewSimpleSigner(wallet, protector)
+	var signer validator_signer.ValidatorSigner = validator_signer.NewSimpleSigner(wallet, protector, storage.Network())
 
 	res, err := signer.SignBeaconProposal(&v1.SignBeaconProposalRequest{
 		Id:     &v1.SignBeaconProposalRequest_PublicKey{PublicKey: publicKeyBytes},
@@ -449,7 +449,7 @@ func (b *backend) pathSignAggregation(ctx context.Context, req *logical.Request,
 	}
 
 	protector := slashing_protection.NewNormalProtection(storage)
-	var signer validator_signer.ValidatorSigner = validator_signer.NewSimpleSigner(wallet, protector)
+	var signer validator_signer.ValidatorSigner = validator_signer.NewSimpleSigner(wallet, protector, storage.Network())
 
 	res, err := signer.Sign(&v1.SignRequest{
 		Id:     &v1.SignRequest_PublicKey{PublicKey: publicKeyBytes},
