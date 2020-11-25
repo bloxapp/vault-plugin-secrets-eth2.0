@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -68,8 +69,25 @@ func NewKeyManager(log *logrus.Entry, opts *Config) (*KeyManager, error) {
 		originPubKey:  opts.PubKey,
 		pubKey:        bytex.ToBytes48(decodedPubKey),
 		network:       opts.Network,
-		httpClient:    httpex.CreateClient(log),
-		log:           log,
+		httpClient: httpex.CreateClient(log, func(resp *http.Response, err error, numTries int) (*http.Response, error) {
+			if err == nil {
+				return resp, nil
+			}
+			defer resp.Body.Close()
+
+			respBody, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				return resp, err
+			}
+
+			log.WithError(err).WithFields(logrus.Fields{
+				"status_code":   resp.StatusCode,
+				"response_body": string(respBody),
+			}).Error("failed to send request to key manager")
+
+			return resp, fmt.Errorf("giving up after %d attempt(s): %s", numTries, err)
+		}),
+		log: log,
 	}, nil
 }
 
