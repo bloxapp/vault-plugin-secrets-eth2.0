@@ -34,7 +34,7 @@ func (test *ConfigRead) Run(t *testing.T) {
 	setup := e2e.Setup(t)
 
 	// sign and save the valid aggregation
-	configBytes, statusCode := setup.ReadConfig(t, core.TestNetwork)
+	configBytes, statusCode := setup.ReadConfig(t, core.PyrmontNetwork)
 	require.Equal(t, http.StatusOK, statusCode)
 
 	expectedGenesisTime, err := time.Parse("2006-01-02 15:04:05 MST", "2020-11-18 12:00:07 UTC")
@@ -44,6 +44,6 @@ func (test *ConfigRead) Run(t *testing.T) {
 	var config configModel
 	err = json.Unmarshal(configBytes, &config)
 	require.NoError(t, err)
-	require.EqualValues(t, core.TestNetwork, config.Data.Network)
+	require.EqualValues(t, core.PyrmontNetwork, config.Data.Network)
 	require.EqualValues(t, expectedGenesisTime, config.Data.GenesisTime)
 }

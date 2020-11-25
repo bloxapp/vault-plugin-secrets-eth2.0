@@ -29,7 +29,7 @@ func (test *AttestationSigning) Run(t *testing.T) {
 	setup := e2e.Setup(t)
 
 	// setup vault with db
-	storage := setup.UpdateStorage(t, core.TestNetwork)
+	storage := setup.UpdateStorage(t, core.PyrmontNetwork)
 	account := shared.RetrieveAccount(t, storage)
 	require.NotNil(t, account)
 	pubKeyBytes := account.ValidatorPublicKey().Marshal()
@@ -51,14 +51,14 @@ func (test *AttestationSigning) Run(t *testing.T) {
 	}
 
 	// Sign data
-	protector := slashing_protection.NewNormalProtection(in_memory.NewInMemStore(core.TestNetwork))
+	protector := slashing_protection.NewNormalProtection(in_memory.NewInMemStore(core.PyrmontNetwork))
 	var signer validator_signer.ValidatorSigner = validator_signer.NewSimpleSigner(wallet, protector)
 
 	res, err := signer.SignBeaconAttestation(test.dataToAttestationRequest(t, pubKeyBytes, dataToSign))
 	require.NoError(t, err)
 
 	// Send sign attestation request
-	sig, err := setup.SignAttestation(dataToSign, core.TestNetwork)
+	sig, err := setup.SignAttestation(dataToSign, core.PyrmontNetwork)
 	require.NoError(t, err)
 
 	require.Equal(t, res.GetSignature(), sig)

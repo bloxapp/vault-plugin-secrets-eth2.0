@@ -47,7 +47,7 @@ func configPaths(b *backend) []*framework.Path {
 					mainnet - MainNet Network
 					pyrmont - Pyrmont Test Network`,
 					AllowedValues: []interface{}{
-						string(core.TestNetwork),
+						string(core.PyrmontNetwork),
 						string(core.MainNetwork),
 					},
 				},

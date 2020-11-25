@@ -45,3 +45,5 @@ require (
 replace github.com/ethereum/go-ethereum => github.com/prysmaticlabs/bazel-go-ethereum v0.0.0-20201113091623-013fd65b3791
 
 replace github.com/prysmaticlabs/prysm => github.com/prysmaticlabs/prysm v1.0.0-beta.3
+
+replace github.com/bloxapp/eth2-key-manager => /Users/alonmuroch/Docs/eth2-key-manager

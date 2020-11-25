@@ -38,13 +38,13 @@ func (test *AccountsList) Run(t *testing.T) {
 	setup := e2e.Setup(t)
 
 	// setup vault with db
-	store := setup.UpdateStorage(t, core.TestNetwork)
+	store := setup.UpdateStorage(t, core.PyrmontNetwork)
 	account := shared.RetrieveAccount(t, store)
 	pubKey := hex.EncodeToString(account.ValidatorPublicKey().Marshal())
 	withdrawalKey := hex.EncodeToString(account.WithdrawalPublicKey().Marshal())
 
 	// sign and save the valid aggregation
-	accountsBytes, statusCode := setup.ListAccounts(t, core.TestNetwork)
+	accountsBytes, statusCode := setup.ListAccounts(t, core.PyrmontNetwork)
 	require.Equal(t, http.StatusOK, statusCode)
 
 	// parse to json

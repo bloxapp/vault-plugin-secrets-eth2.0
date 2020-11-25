@@ -24,7 +24,7 @@ func (test *ProposalSigningAccountNotFound) Run(t *testing.T) {
 	setup := e2e.Setup(t)
 
 	// setup vault with db
-	setup.UpdateStorage(t, core.TestNetwork)
+	setup.UpdateStorage(t, core.PyrmontNetwork)
 
 	// sign
 	_, err := setup.SignProposal(
@@ -39,7 +39,7 @@ func (test *ProposalSigningAccountNotFound) Run(t *testing.T) {
 			"targetEpoch":     8878,
 			"targetRoot":      "17959acc370274756fa5e9fdd7e7adf17204f49cc8457e49438c42c4883cbfb0",
 		},
-		core.TestNetwork,
+		core.PyrmontNetwork,
 	)
 	require.Error(t, err)
 	require.IsType(t, &e2e.ServiceError{}, err)

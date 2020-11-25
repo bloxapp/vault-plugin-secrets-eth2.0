@@ -26,7 +26,7 @@ func (test *AttestationDoubleSigning) Run(t *testing.T) {
 	setup := e2e.Setup(t)
 
 	// setup vault with db
-	storage := setup.UpdateStorage(t, core.TestNetwork)
+	storage := setup.UpdateStorage(t, core.PyrmontNetwork)
 	account := shared.RetrieveAccount(t, storage)
 	pubKey := hex.EncodeToString(account.ValidatorPublicKey().Marshal())
 
@@ -43,7 +43,7 @@ func (test *AttestationDoubleSigning) Run(t *testing.T) {
 			"targetEpoch":     8878,
 			"targetRoot":      "17959acc370274756fa5e9fdd7e7adf17204f49cc8457e49438c42c4883cbfb0",
 		},
-		core.TestNetwork,
+		core.PyrmontNetwork,
 	)
 	require.NoError(t, err)
 
@@ -60,7 +60,7 @@ func (test *AttestationDoubleSigning) Run(t *testing.T) {
 			"targetEpoch":     8878,
 			"targetRoot":      "17959acc370274756fa5e9fdd7e7adf17204f49cc8457e49438c42c4883cbfb0",
 		},
-		core.TestNetwork,
+		core.PyrmontNetwork,
 	)
 	expectedErr := fmt.Sprintf("1 error occurred:\n\t* failed to sign attestation: slashable attestation (DoubleVote), not signing\n\n")
 	require.Error(t, err)
