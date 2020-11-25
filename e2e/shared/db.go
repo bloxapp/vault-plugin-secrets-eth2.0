@@ -19,7 +19,7 @@ func BaseInmemStorage(t *testing.T) (*in_memory.InMemStore, error) {
 	err := types.InitBLS()
 	require.NoError(t, err)
 
-	store := in_memory.NewInMemStore(core.MainNetwork)
+	store := in_memory.NewInMemStore(core.PyrmontNetwork)
 
 	entropy, err := core.GenerateNewEntropy()
 	require.NoError(t, err)

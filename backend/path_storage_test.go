@@ -86,7 +86,7 @@ func TestStorage(t *testing.T) {
 		acc, err := wallet.AccountByPublicKey("95087182937f6982ae99f9b06bd116f463f414513032e33a3d175d9662eddf162101fcf6ca2a9fedaded74b8047c5dcf")
 		require.NoError(t, err)
 
-		vault := store.NewHashicorpVaultStore(context.Background(), logicalStorage, core.MainNetwork)
+		vault := store.NewHashicorpVaultStore(context.Background(), logicalStorage, core.PyrmontNetwork)
 		wallet2, err := vault.OpenWallet()
 		require.NoError(t, err)
 		require.Equal(t, wallet.ID().String(), wallet2.ID().String())
