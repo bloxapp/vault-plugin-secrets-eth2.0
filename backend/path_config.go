@@ -3,8 +3,6 @@ package backend
 import (
 	"context"
 	"fmt"
-	"time"
-
 	"github.com/bloxapp/eth2-key-manager/core"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
@@ -26,7 +24,6 @@ const (
 // Config contains the configuration for each mount
 type Config struct {
 	Network     core.Network `json:"network"`
-	GenesisTime time.Time    `json:"genesis_time"`
 }
 
 func configPaths(b *backend) []*framework.Path {
@@ -51,10 +48,6 @@ func configPaths(b *backend) []*framework.Path {
 						string(core.MainNetwork),
 					},
 				},
-				"genesis_time": {
-					Type:        framework.TypeString,
-					Description: `Genesis time of the network`,
-				},
 			},
 		},
 	}
@@ -63,17 +56,9 @@ func configPaths(b *backend) []*framework.Path {
 // pathWriteConfig is the write config path handler
 func (b *backend) pathWriteConfig(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
 	network := data.Get("network").(string)
-	genesisTimeStr := data.Get("genesis_time").(string)
-
-	// Parse genesis time
-	genesisTime, err := time.Parse(genesisTimeFormat, genesisTimeStr)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to parse genesis time")
-	}
 
 	configBundle := Config{
 		Network:     core.NetworkFromString(network),
-		GenesisTime: genesisTime,
 	}
 
 	// Create storage entry
@@ -91,7 +76,6 @@ func (b *backend) pathWriteConfig(ctx context.Context, req *logical.Request, dat
 	return &logical.Response{
 		Data: map[string]interface{}{
 			"network":      configBundle.Network,
-			"genesis_time": configBundle.GenesisTime,
 		},
 	}, nil
 }
@@ -111,7 +95,6 @@ func (b *backend) pathReadConfig(ctx context.Context, req *logical.Request, data
 	return &logical.Response{
 		Data: map[string]interface{}{
 			"network":      configBundle.Network,
-			"genesis_time": configBundle.GenesisTime,
 		},
 	}, nil
 }

@@ -242,11 +242,6 @@ func (b *backend) pathSignAttestation(ctx context.Context, req *logical.Request,
 		return nil, errors.Wrap(err, "failed to HEX decode target root")
 	}
 
-	// Check if the given slot came in time
-	if !b.isSlotTime(config.GenesisTime, slot) {
-		return nil, errors.Wrap(err, "it's not a slot time")
-	}
-
 	protector := slashing_protection.NewNormalProtection(storage)
 	var signer validator_signer.ValidatorSigner = validator_signer.NewSimpleSigner(wallet, protector, storage.Network())
 
@@ -354,11 +349,6 @@ func (b *backend) pathSignProposal(ctx context.Context, req *logical.Request, da
 	bodyRootBytes, err := hex.DecodeString(bodyRoot)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to HEX decode body root")
-	}
-
-	// Check if the given slot came in time
-	if !b.isSlotTime(config.GenesisTime, slot) {
-		return nil, errors.Wrap(err, "it's not a slot time")
 	}
 
 	protector := slashing_protection.NewNormalProtection(storage)

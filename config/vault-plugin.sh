@@ -19,8 +19,7 @@ vault secrets enable \
 
 echo "Configuring Pyrmont Test network..."
 vault write ethereum/pyrmont/config \
-    network="pyrmont" \
-    genesis_time="$PYRMONT_GENESIS_TIME"
+    network="pyrmont"
 
 # Enable mainnet network
 echo "Enabling MainNet network"
@@ -31,8 +30,7 @@ vault secrets enable \
 
 echo "Configuring MainNet network..."
 vault write ethereum/mainnet/config \
-    network="mainnet" \
-    genesis_time="$MAINNET_GENESIS_TIME"
+    network="mainnet"
 
 # Reload plugin
 curl --insecure --header "X-Vault-Token: $(cat /data/keys/vault.root.token)" \

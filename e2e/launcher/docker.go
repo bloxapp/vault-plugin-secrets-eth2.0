@@ -86,8 +86,6 @@ func (l *Docker) Launch(ctx context.Context, name string) (*Config, error) {
 			Env: []string{
 				"VAULT_EXTERNAL_ADDRESS=172.17.0.1",
 				"VAULT_CLIENT_TIMEOUT=30s",
-				"PYRMONT_GENESIS_TIME=2020-11-18 12:00:07 UTC",
-				"MAINNET_GENESIS_TIME=2020-12-01 12:00:00 UTC",
 				"UNSEAL=true",
 			},
 		},
