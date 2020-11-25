@@ -68,7 +68,7 @@ func NewKeyManager(log *logrus.Entry, opts *Config) (*KeyManager, error) {
 		originPubKey:  opts.PubKey,
 		pubKey:        bytex.ToBytes48(decodedPubKey),
 		network:       opts.Network,
-		httpClient:    httpex.CreateClient(),
+		httpClient:    httpex.CreateClient(log),
 		log:           log,
 	}, nil
 }
