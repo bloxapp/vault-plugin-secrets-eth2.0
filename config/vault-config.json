@@ -10,6 +10,5 @@
       "address": "[::]:8200",
       "tls_disable": 1
     }
-  },
-  "ui": true
+  }
 }

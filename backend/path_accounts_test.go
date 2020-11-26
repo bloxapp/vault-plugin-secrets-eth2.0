@@ -9,9 +9,8 @@ import (
 	"github.com/bloxapp/eth2-key-manager/core"
 	log "github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/vault/sdk/helper/logging"
-	"github.com/sirupsen/logrus"
-
 	"github.com/hashicorp/vault/sdk/logical"
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/require"
 )
 

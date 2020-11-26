@@ -44,7 +44,7 @@ func (ee EventFormatter) Name() string {
 func (ee EventFormatter) SetupOnce(client *gosentry.Client) {
 	client.AddEventProcessor(func(event *gosentry.Event, hint *gosentry.EventHint) *gosentry.Event {
 		for i := range event.Exception {
-			event.Exception[i].Type = event.Exception[i].Value
+			event.Exception[i].Type = event.Message
 
 		}
 		return event

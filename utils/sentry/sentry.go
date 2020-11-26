@@ -1,8 +1,6 @@
 package sentry
 
 import (
-	"time"
-
 	gosentry "github.com/getsentry/sentry-go"
 )
 
@@ -16,9 +14,4 @@ func Init(dsn string) error {
 			return append(integrations, new(ExtractExtra), new(EventFormatter))
 		},
 	})
-}
-
-// Flush flushes sentry logs.
-func Flush() {
-	gosentry.Flush(2 * time.Second)
 }

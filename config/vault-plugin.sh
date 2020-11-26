@@ -11,7 +11,7 @@ vault plugin register \
     secret ethsign
 
 # Enable pyrmont network
-echo "Enabling Test network..."
+echo "Enabling Pyrmont Test network..."
 vault secrets enable \
     -path=ethereum/pyrmont \
     -description="Eth Signing Wallet - Pyrmont Test Network" \
