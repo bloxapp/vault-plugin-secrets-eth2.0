@@ -45,6 +45,20 @@ func baseInmemStorage() (*in_memory.InMemStore, uuid.UUID, error) {
 		return nil, uuid.UUID{}, err
 	}
 
+	err = inMemStore.SaveHighestAttestation(acc.ValidatorPublicKey(), &core.BeaconAttestation{
+		Source: &core.Checkpoint{
+			Epoch: 0,
+			Root:  nil,
+		},
+		Target: &core.Checkpoint{
+			Epoch: 0,
+			Root:  nil,
+		},
+	})
+	if err != nil {
+		return nil, uuid.UUID{}, err
+	}
+
 	return inMemStore, acc.ID(), nil
 }
 
@@ -60,39 +74,43 @@ func TestStorage(t *testing.T) {
 	b, _ := getBackend(t)
 	inMemStore, _, err := baseInmemStorage()
 	require.NoError(t, err)
-	var logicalStorage logical.Storage
 
 	// marshal and to string
 	byts, err := json.Marshal(inMemStore)
 	require.NoError(t, err)
 	data := hex.EncodeToString(byts)
 
-	// test
-	t.Run("import from in-memory to hashicorp vault", func(t *testing.T) {
-		req := logical.TestRequest(t, logical.CreateOperation, "storage")
-		logicalStorage = req.Storage
+	getVault := func(tt *testing.T) *store.HashicorpVaultStore {
+		req := logical.TestRequest(tt, logical.CreateOperation, "storage")
 		req.Data = map[string]interface{}{
 			"data": data,
 		}
 		res, err := b.HandleRequest(context.Background(), req)
-		require.NoError(t, err)
-		require.True(t, res.Data["status"].(bool))
-	})
+		require.NoError(tt, err)
+		require.True(tt, res.Data["status"].(bool))
+		return store.NewHashicorpVaultStore(context.Background(), req.Storage, core.PyrmontNetwork)
+	}
 
 	t.Run("verify wallet and account", func(t *testing.T) {
-		// get wallet and account
-		wallet, err := inMemStore.OpenWallet()
+		vault := getVault(t)
+		wallet, err := vault.OpenWallet()
+		require.NoError(t, err)
+		require.Equal(t, wallet.ID().String(), wallet.ID().String())
+
+		_, err = wallet.AccountByPublicKey("95087182937f6982ae99f9b06bd116f463f414513032e33a3d175d9662eddf162101fcf6ca2a9fedaded74b8047c5dcf")
+		require.NoError(t, err)
+	})
+
+	t.Run("verify highest att.", func(t *testing.T) {
+		vault := getVault(t)
+		wallet, err := vault.OpenWallet()
 		require.NoError(t, err)
 		acc, err := wallet.AccountByPublicKey("95087182937f6982ae99f9b06bd116f463f414513032e33a3d175d9662eddf162101fcf6ca2a9fedaded74b8047c5dcf")
 		require.NoError(t, err)
 
-		vault := store.NewHashicorpVaultStore(context.Background(), logicalStorage, core.PyrmontNetwork)
-		wallet2, err := vault.OpenWallet()
-		require.NoError(t, err)
-		require.Equal(t, wallet.ID().String(), wallet2.ID().String())
-
-		acc2, err := wallet2.AccountByPublicKey("95087182937f6982ae99f9b06bd116f463f414513032e33a3d175d9662eddf162101fcf6ca2a9fedaded74b8047c5dcf")
-		require.NoError(t, err)
-		require.Equal(t, acc.ID().String(), acc2.ID().String())
+		att := vault.RetrieveHighestAttestation(acc.ValidatorPublicKey())
+		require.NotNil(t, att)
+		require.EqualValues(t, att.Source.Epoch, 0)
+		require.EqualValues(t, att.Target.Epoch, 0)
 	})
 }

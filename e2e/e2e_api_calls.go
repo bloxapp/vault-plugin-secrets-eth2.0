@@ -12,6 +12,8 @@ import (
 	"os"
 	"testing"
 
+	"github.com/bloxapp/eth2-key-manager/stores/in_memory"
+
 	"github.com/bloxapp/eth2-key-manager/core"
 	"github.com/pborman/uuid"
 	"github.com/sirupsen/logrus"
@@ -237,7 +239,7 @@ func (setup *BaseSetup) ReadSlashingStorage(t *testing.T, network core.Network) 
 }
 
 // UpdateStorage updates the storage.
-func (setup *BaseSetup) UpdateStorage(t *testing.T, network core.Network) core.Storage {
+func (setup *BaseSetup) UpdateStorage(t *testing.T, network core.Network) *in_memory.InMemStore {
 	// get store
 	store, err := shared.BaseInmemStorage(t)
 	require.NoError(t, err)
@@ -282,6 +284,5 @@ func (setup *BaseSetup) UpdateStorage(t *testing.T, network core.Network) core.S
 	require.Equal(t, http.StatusOK, resp.StatusCode, respBody)
 
 	fmt.Printf("e2e: setup hashicorp vault db\n")
-
 	return store
 }

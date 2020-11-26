@@ -43,6 +43,21 @@ func BaseInmemStorage(t *testing.T) (*in_memory.InMemStore, error) {
 		return nil, err
 	}
 
+	// base highest att.
+	err = store.SaveHighestAttestation(acc.ValidatorPublicKey(), &core.BeaconAttestation{
+		Source:          &core.Checkpoint{
+			Epoch: 0,
+			Root:  nil,
+		},
+		Target:          &core.Checkpoint{
+			Epoch: 0,
+			Root:  nil,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	return store, nil
 }
 
