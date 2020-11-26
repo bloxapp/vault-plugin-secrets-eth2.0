@@ -24,7 +24,7 @@ func (test *AggregationSigningAccountNotFound) Run(t *testing.T) {
 	setup := e2e.Setup(t)
 
 	// setup vault with db
-	setup.UpdateStorage(t, core.PyrmontNetwork)
+	setup.UpdateStorage(t, core.PyrmontNetwork, true)
 
 	_, err := setup.SignAggregation(
 		map[string]interface{}{

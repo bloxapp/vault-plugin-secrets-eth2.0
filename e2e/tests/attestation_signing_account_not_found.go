@@ -24,7 +24,7 @@ func (test *AttestationSigningAccountNotFound) Run(t *testing.T) {
 	setup := e2e.Setup(t)
 
 	// setup vault with db
-	setup.UpdateStorage(t, core.PyrmontNetwork)
+	setup.UpdateStorage(t, core.PyrmontNetwork, true)
 
 	// sign
 	_, err := setup.SignAttestation(

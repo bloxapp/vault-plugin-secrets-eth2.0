@@ -26,7 +26,7 @@ func (test *ProposalDoubleSigning) Run(t *testing.T) {
 	setup := e2e.Setup(t)
 
 	// setup vault with db
-	store := setup.UpdateStorage(t, core.PyrmontNetwork)
+	store := setup.UpdateStorage(t, core.PyrmontNetwork, true)
 	account := shared.RetrieveAccount(t, store)
 	pubKey := hex.EncodeToString(account.ValidatorPublicKey().Marshal())
 

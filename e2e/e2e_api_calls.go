@@ -239,9 +239,9 @@ func (setup *BaseSetup) ReadSlashingStorage(t *testing.T, network core.Network) 
 }
 
 // UpdateStorage updates the storage.
-func (setup *BaseSetup) UpdateStorage(t *testing.T, network core.Network) *in_memory.InMemStore {
+func (setup *BaseSetup) UpdateStorage(t *testing.T, network core.Network, minimalSlashingData bool) *in_memory.InMemStore {
 	// get store
-	store, err := shared.BaseInmemStorage(t)
+	store, err := shared.BaseInmemStorage(t, minimalSlashingData)
 	require.NoError(t, err)
 
 	// encode store
