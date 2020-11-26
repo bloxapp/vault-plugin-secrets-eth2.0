@@ -41,7 +41,7 @@ func (test *SlashingStorageRead) Run(t *testing.T) {
 	_, err := setup.SignProposal(map[string]interface{}{
 		"public_key":    pubKey,
 		"domain":        "01000000f071c66c6561d0b939feb15f513a019d99a84bd85635221e3ad42dac",
-		"slot":          284115,
+		"slot":          78,
 		"proposerIndex": 1010,
 		"parentRoot":    "7b5679277ca45ea74e1deebc9d3e8c0e7d6c570b3cfaf6884be144a81dac9a0e",
 		"stateRoot":     "7402fdc1ce16d449d637c34a172b349a12b2bae8d6d77e401006594d8057c33d",

@@ -15,6 +15,8 @@ var tests = []E2E{
 	&AttestationSigningAccountNotFound{},
 	&AttestationDoubleSigning{},
 	&AttestationConcurrentSigning{},
+	&AttestationFatFutureSigning{},
+	&AttestationNoSlashingDataSigning{},
 
 	// Aggregation signing
 	&AggregationSigning{},
@@ -22,11 +24,12 @@ var tests = []E2E{
 	&AggregationConcurrentSigning{},
 	&AggregationSigningAccountNotFound{},
 
-	// Proposal signing
+	//Proposal signing
 	&ProposalSigning{},
 	&ProposalDoubleSigning{},
 	&ProposalConcurrentSigning{},
 	&ProposalSigningAccountNotFound{},
+	&ProposalFatFutureSigning{},
 
 	// Accounts tests
 	&AccountsList{},

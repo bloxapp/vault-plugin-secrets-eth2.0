@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"testing"
-	"time"
 
 	"github.com/bloxapp/eth2-key-manager/core"
 
@@ -15,8 +14,7 @@ import (
 
 type configModel struct {
 	Data struct {
-		Network     string    `json:"network"`
-		GenesisTime time.Time `json:"genesis_time"`
+		Network string `json:"network"`
 	} `json:"data"`
 }
 
@@ -37,13 +35,9 @@ func (test *ConfigRead) Run(t *testing.T) {
 	configBytes, statusCode := setup.ReadConfig(t, core.PyrmontNetwork)
 	require.Equal(t, http.StatusOK, statusCode)
 
-	expectedGenesisTime, err := time.Parse("2006-01-02 15:04:05 MST", "2020-11-18 12:00:07 UTC")
-	require.NoError(t, err)
-
 	// parse to json
 	var config configModel
-	err = json.Unmarshal(configBytes, &config)
+	err := json.Unmarshal(configBytes, &config)
 	require.NoError(t, err)
 	require.EqualValues(t, core.PyrmontNetwork, config.Data.Network)
-	require.EqualValues(t, expectedGenesisTime, config.Data.GenesisTime)
 }
