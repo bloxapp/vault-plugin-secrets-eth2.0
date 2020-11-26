@@ -3,10 +3,8 @@ package backend
 import (
 	"context"
 	"encoding/hex"
-	"time"
 
 	vault "github.com/bloxapp/eth2-key-manager"
-	"github.com/bloxapp/eth2-key-manager/core"
 	"github.com/bloxapp/eth2-key-manager/slashing_protection"
 	"github.com/bloxapp/eth2-key-manager/validator_signer"
 	"github.com/bloxapp/eth2-key-manager/wallet_hd"
@@ -456,15 +454,4 @@ func (b *backend) pathSignAggregation(ctx context.Context, req *logical.Request,
 			"signature": hex.EncodeToString(res.GetSignature()),
 		},
 	}, nil
-}
-
-func (b *backend) isSlotTime(network core.Network, slot int) bool {
-	timeSinceGenesisStart := uint64(slot) * 12
-	start := network.GenesisTime().Add(time.Duration(timeSinceGenesisStart) * time.Second)
-	left := start.Sub(time.Now().UTC())
-
-	// Deviation = seconds per one slot, that's should be enough
-	deviation := time.Minute
-
-	return left < deviation || left > -deviation
 }
