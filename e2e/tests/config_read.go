@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/bloxapp/eth2-key-manager/core"
-
 	"github.com/stretchr/testify/require"
 
 	"github.com/bloxapp/key-vault/e2e"

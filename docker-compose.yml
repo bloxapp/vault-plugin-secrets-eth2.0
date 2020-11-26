@@ -18,9 +18,6 @@ services:
       LOG_FORMAT: ${LOG_FORMAT}
       LOG_LEVELS: ${LOG_LEVELS}
       LOG_DSN: ${LOG_DSN}
-      # Genesis times per network
-      PYRMONT_GENESIS_TIME: "2020-11-18 12:00:07 UTC"
-      MAINNET_GENESIS_TIME: "2020-12-01 12:00:00 UTC"
     cap_add:
       - IPC_LOCK
     restart: unless-stopped
