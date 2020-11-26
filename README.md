@@ -377,12 +377,3 @@ New networks could be defined by the following steps:
     ```
 
 2. Update policies `./policies/admin-policy.hcl` and `./policies/signer-policy.hcl` by adding a definition with a new network in the path.
-
-
-sudo apt-get update
-sudo apt-get install certbot
-sudo certbot certonly \
-    --standalone -d ec2-54-193-231-182.us-west-1.compute.amazonaws.com \
-    --email support@blox.io \
-    --agree-tos \
-    --non-interactive
