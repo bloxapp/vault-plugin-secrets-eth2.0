@@ -6,23 +6,24 @@ import (
 	"testing"
 
 	"github.com/bloxapp/eth2-key-manager/core"
-	"github.com/bloxapp/key-vault/e2e"
-	"github.com/bloxapp/key-vault/e2e/shared"
 	"github.com/stretchr/testify/require"
 	v1 "github.com/wealdtech/eth2-signer-api/pb/v1"
+
+	"github.com/bloxapp/key-vault/e2e"
+	"github.com/bloxapp/key-vault/e2e/shared"
 )
 
-// AttestationSigning tests sign attestation endpoint.
-type AttestationFatFutureSigning struct {
+// AttestationFarFutureSigning tests sign attestation endpoint with future signing.
+type AttestationFarFutureSigning struct {
 }
 
 // Name returns the name of the test.
-func (test *AttestationFatFutureSigning) Name() string {
+func (test *AttestationFarFutureSigning) Name() string {
 	return "Test far future attestation (source and target) signing"
 }
 
 // Run run the test.
-func (test *AttestationFatFutureSigning) Run(t *testing.T) {
+func (test *AttestationFarFutureSigning) Run(t *testing.T) {
 	setup := e2e.Setup(t)
 
 	// setup vault with db
@@ -39,7 +40,7 @@ func (test *AttestationFatFutureSigning) Run(t *testing.T) {
 	test.testFarFuture(t, setup, pubKeyBytes, 8877, 8878, expectedTargetErr) // far future both
 }
 
-func (test *AttestationFatFutureSigning) testFarFuture(
+func (test *AttestationFarFutureSigning) testFarFuture(
 	t *testing.T,
 	setup *e2e.BaseSetup,
 	pubKeyBytes []byte,
@@ -64,7 +65,7 @@ func (test *AttestationFatFutureSigning) testFarFuture(
 	require.EqualError(t, err, expectedErr, fmt.Sprintf("actual: %s\n", err.Error()))
 }
 
-func (test *AttestationFatFutureSigning) dataToAttestationRequest(t *testing.T, pubKey []byte, data map[string]interface{}) *v1.SignBeaconAttestationRequest {
+func (test *AttestationFarFutureSigning) dataToAttestationRequest(t *testing.T, pubKey []byte, data map[string]interface{}) *v1.SignBeaconAttestationRequest {
 	// Decode domain
 	domainBytes, err := hex.DecodeString(data["domain"].(string))
 	require.NoError(t, err)

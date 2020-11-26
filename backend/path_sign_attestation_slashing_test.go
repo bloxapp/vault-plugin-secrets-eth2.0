@@ -7,11 +7,11 @@ import (
 	"testing"
 
 	"github.com/bloxapp/eth2-key-manager/core"
-	"github.com/bloxapp/key-vault/backend/store"
-	e2types "github.com/wealdtech/go-eth2-types/v2"
-
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/stretchr/testify/require"
+	e2types "github.com/wealdtech/go-eth2-types/v2"
+
+	"github.com/bloxapp/key-vault/backend/store"
 )
 
 func basicAttestationData() map[string]interface{} {

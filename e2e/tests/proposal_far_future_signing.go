@@ -6,23 +6,24 @@ import (
 	"testing"
 
 	"github.com/bloxapp/eth2-key-manager/core"
-	"github.com/bloxapp/key-vault/e2e"
-	"github.com/bloxapp/key-vault/e2e/shared"
 	"github.com/stretchr/testify/require"
 	v1 "github.com/wealdtech/eth2-signer-api/pb/v1"
+
+	"github.com/bloxapp/key-vault/e2e"
+	"github.com/bloxapp/key-vault/e2e/shared"
 )
 
-// ProposalSigning tests sign proposal endpoint.
-type ProposalFatFutureSigning struct {
+// ProposalFarFutureSigning tests sign proposal endpoint with future signing.
+type ProposalFarFutureSigning struct {
 }
 
 // Name returns the name of the test.
-func (test *ProposalFatFutureSigning) Name() string {
+func (test *ProposalFarFutureSigning) Name() string {
 	return "Test proposal far future signing"
 }
 
 // Run run the test.
-func (test *ProposalFatFutureSigning) Run(t *testing.T) {
+func (test *ProposalFarFutureSigning) Run(t *testing.T) {
 	setup := e2e.Setup(t)
 
 	// setup vault with db
@@ -48,7 +49,7 @@ func (test *ProposalFatFutureSigning) Run(t *testing.T) {
 	require.EqualError(t, err, expectedErr, fmt.Sprintf("actual: %s\n", err.Error()))
 }
 
-func (test *ProposalFatFutureSigning) dataToProposalRequest(t *testing.T, pubKey []byte, data map[string]interface{}) *v1.SignBeaconProposalRequest {
+func (test *ProposalFarFutureSigning) dataToProposalRequest(t *testing.T, pubKey []byte, data map[string]interface{}) *v1.SignBeaconProposalRequest {
 	// Decode domain
 	domainBytes, err := hex.DecodeString(data["domain"].(string))
 	require.NoError(t, err)

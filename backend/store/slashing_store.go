@@ -20,6 +20,7 @@ const (
 	WalletProposalsPath          = WalletProposalsBase + "%d" // account/proposal
 )
 
+// SaveHighestAttestation saves highest attestation
 func (store *HashicorpVaultStore) SaveHighestAttestation(key e2types.PublicKey, req *core.BeaconAttestation) error {
 	path := fmt.Sprintf(WalletHighestAttestationPath+"%s", store.identifierFromKey(key))
 	data, err := json.Marshal(req)
@@ -34,6 +35,7 @@ func (store *HashicorpVaultStore) SaveHighestAttestation(key e2types.PublicKey, 
 	})
 }
 
+// RetrieveHighestAttestation retrieves highest attestation
 func (store *HashicorpVaultStore) RetrieveHighestAttestation(key e2types.PublicKey) *core.BeaconAttestation {
 	path := fmt.Sprintf(WalletHighestAttestationPath+"%s", store.identifierFromKey(key))
 	entry, err := store.storage.Get(store.ctx, path)
