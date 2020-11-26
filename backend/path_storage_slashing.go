@@ -27,7 +27,7 @@ const (
 // SlashingHistory contains slashing history data.
 type SlashingHistory struct {
 	HighestAttestation *core.BeaconAttestation
-	Proposals    []*core.BeaconBlockHeader `json:"proposals"`
+	Proposals          []*core.BeaconBlockHeader `json:"proposals"`
 }
 
 func storageSlashingDataPaths(b *backend) []*framework.Path {
@@ -189,26 +189,6 @@ func loadAccountSlashingHistory(storage *store.HashicorpVaultStore, pubKey types
 		if highestAtt == nil {
 			errs[0] = errors.Errorf("highest attestation is nil")
 		}
-		//if err != nil {
-		//	errs[0] = errors.Wrap(err, "failed to retrieve latest attestation")
-		//	return
-		//}
-
-		//if latestAttestation != nil && latestAttestation.Target != nil && latestAttestation.Target.Epoch > 1000 {
-		//	from := latestAttestation.Target.Epoch - 1000
-		//	to := latestAttestation.Target.Epoch
-		//	if attestation, err = storage.ListAttestations(pubKey, from, to); err != nil {
-		//		errs[0] = errors.Wrap(err, "failed to list attestations data by epochs limit")
-		//		return
-		//	}
-		//
-		//	attestation = append(attestation, latestAttestation)
-		//} else {
-		//	if attestation, err = storage.ListAllAttestations(pubKey); err != nil {
-		//		errs[0] = errors.Wrap(err, "failed to list all attestations data")
-		//		return
-		//	}
-		//}
 	}()
 
 	// Fetch proposals
@@ -233,7 +213,7 @@ func loadAccountSlashingHistory(storage *store.HashicorpVaultStore, pubKey types
 
 	slashingHistoryEncoded, err := json.Marshal(SlashingHistory{
 		HighestAttestation: highestAtt,
-		Proposals:    proposals,
+		Proposals:          proposals,
 	})
 	if err != nil {
 		return "", errors.Wrap(err, "failed to marshal slashing history")
@@ -268,19 +248,6 @@ func storeAccountSlashingHistory(storage *store.HashicorpVaultStore, pubKey type
 		if err := storage.SaveHighestAttestation(pubKey, slashingHistory.HighestAttestation); err != nil {
 			attErrs[0] = errors.Wrapf(err, "failed to save attestation for slot %d", slashingHistory.HighestAttestation.Slot)
 		}
-
-		//var attWg sync.WaitGroup
-		//for i, attestation := range slashingHistory.Attestations {
-		//	attWg.Add(1)
-		//	go func(i int, attestation *core.BeaconAttestation) {
-		//		defer attWg.Done()
-		//
-		//		if err := storage.SaveAttestation(pubKey, attestation); err != nil {
-		//			attErrs[i] = errors.Wrapf(err, "failed to save attestation for slot %d", attestation.Slot)
-		//		}
-		//	}(i, attestation)
-		//}
-		//attWg.Wait()
 	}()
 
 	// Store proposal history

@@ -4,10 +4,11 @@ import (
 	"context"
 	"encoding/hex"
 	"fmt"
+	"testing"
+
 	"github.com/bloxapp/eth2-key-manager/core"
 	"github.com/bloxapp/key-vault/backend/store"
 	e2types "github.com/wealdtech/go-eth2-types/v2"
-	"testing"
 
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/stretchr/testify/require"
@@ -32,11 +33,11 @@ func updateWithBasicHighestAtt(storage logical.Storage) error {
 	pkByts, _ := hex.DecodeString("95087182937f6982ae99f9b06bd116f463f414513032e33a3d175d9662eddf162101fcf6ca2a9fedaded74b8047c5dcf")
 	pk, _ := e2types.BLSPublicKeyFromBytes(pkByts)
 	return s.SaveHighestAttestation(pk, &core.BeaconAttestation{
-		Source:          &core.Checkpoint{
+		Source: &core.Checkpoint{
 			Epoch: 0,
 			Root:  nil,
 		},
-		Target:          &core.Checkpoint{
+		Target: &core.Checkpoint{
 			Epoch: 0,
 			Root:  nil,
 		},

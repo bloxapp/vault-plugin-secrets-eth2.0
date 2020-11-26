@@ -3,6 +3,7 @@ package backend
 import (
 	"context"
 	"fmt"
+
 	"github.com/bloxapp/eth2-key-manager/core"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"

@@ -35,7 +35,7 @@ func getBackend(t *testing.T) (logical.Backend, logical.Storage) {
 
 func setupBaseStorage(t *testing.T, req *logical.Request) {
 	entry, err := logical.StorageEntryJSON("config", Config{
-		Network:     core.PyrmontNetwork,
+		Network: core.PyrmontNetwork,
 	})
 	require.NoError(t, err)
 	req.Storage.Put(context.Background(), entry)
