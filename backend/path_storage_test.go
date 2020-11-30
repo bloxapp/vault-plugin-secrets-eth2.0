@@ -6,9 +6,10 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/bloxapp/eth2-key-manager/wallets/hd"
+
 	"github.com/bloxapp/eth2-key-manager/core"
 	"github.com/bloxapp/eth2-key-manager/stores/in_memory"
-	"github.com/bloxapp/eth2-key-manager/wallet_hd"
 	uuid "github.com/google/uuid"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/stretchr/testify/require"
@@ -25,7 +26,7 @@ func baseInmemStorage() (*in_memory.InMemStore, uuid.UUID, error) {
 	inMemStore := in_memory.NewInMemStore(core.PyrmontNetwork)
 
 	// wallet
-	wallet := wallet_hd.NewHDWallet(&core.WalletContext{Storage: inMemStore})
+	wallet := hd.NewHDWallet(&core.WalletContext{Storage: inMemStore})
 	err := inMemStore.SaveWallet(wallet)
 	if err != nil {
 		return nil, uuid.UUID{}, err

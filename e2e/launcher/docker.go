@@ -117,6 +117,7 @@ func (l *Docker) Launch(ctx context.Context, name string) (*Config, error) {
 			break
 		}
 	}
+	ip = "127.0.0.1"
 
 	// Read logs so we can understand the plugin is loaded
 	logsStream, err := l.client.ContainerLogs(ctx, cont.ID, types.ContainerLogsOptions{

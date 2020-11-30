@@ -6,9 +6,10 @@ import (
 	"encoding/json"
 	"sync"
 
+	"github.com/bloxapp/eth2-key-manager/wallets/hd"
+
 	vault "github.com/bloxapp/eth2-key-manager"
 	"github.com/bloxapp/eth2-key-manager/core"
-	"github.com/bloxapp/eth2-key-manager/wallet_hd"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/pkg/errors"
@@ -95,7 +96,7 @@ func (b *backend) pathMinimalSlashingStorageUpdate(ctx context.Context, req *log
 
 	for _, err := range errs {
 		if err != nil {
-			if err == wallet_hd.ErrAccountNotFound {
+			if err == hd.ErrAccountNotFound {
 				return b.notFoundResponse()
 			}
 

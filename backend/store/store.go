@@ -5,10 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/bloxapp/eth2-key-manager/wallets"
+	"github.com/bloxapp/eth2-key-manager/wallets/hd"
+
 	"github.com/bloxapp/eth2-key-manager/core"
 	"github.com/bloxapp/eth2-key-manager/encryptor"
 	"github.com/bloxapp/eth2-key-manager/stores/in_memory"
-	"github.com/bloxapp/eth2-key-manager/wallet_hd"
 	"github.com/google/uuid"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/pkg/errors"
@@ -138,7 +140,7 @@ func (store *HashicorpVaultStore) OpenWallet() (core.Wallet, error) {
 		return nil, fmt.Errorf("wallet not found")
 	}
 
-	var ret wallet_hd.HDWallet
+	var ret hd.HDWallet
 	ret.SetContext(store.freshContext())
 	if err := json.Unmarshal(entry.Value, &ret); err != nil {
 		return nil, errors.Wrap(err, "failed to unmarshal HD Wallet object")
@@ -185,7 +187,7 @@ func (store *HashicorpVaultStore) OpenAccount(accountID uuid.UUID) (core.Validat
 	}
 
 	// un-marshal
-	var ret wallet_hd.HDAccount
+	var ret wallets.HDAccount
 	ret.SetContext(store.freshContext())
 	if err := json.Unmarshal(entry.Value, &ret); err != nil {
 		return nil, errors.Wrap(err, "failed to unmarshal HD account object")

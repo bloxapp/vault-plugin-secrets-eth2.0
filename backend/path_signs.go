@@ -4,10 +4,11 @@ import (
 	"context"
 	"encoding/hex"
 
+	"github.com/bloxapp/eth2-key-manager/wallets/hd"
+
 	vault "github.com/bloxapp/eth2-key-manager"
 	"github.com/bloxapp/eth2-key-manager/slashing_protection"
 	"github.com/bloxapp/eth2-key-manager/validator_signer"
-	"github.com/bloxapp/eth2-key-manager/wallet_hd"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/pkg/errors"
@@ -197,7 +198,7 @@ func (b *backend) pathSignAttestation(ctx context.Context, req *logical.Request,
 
 	account, err := wallet.AccountByPublicKey(publicKey)
 	if err != nil {
-		if err == wallet_hd.ErrAccountNotFound {
+		if err == hd.ErrAccountNotFound {
 			return b.notFoundResponse()
 		}
 
@@ -306,7 +307,7 @@ func (b *backend) pathSignProposal(ctx context.Context, req *logical.Request, da
 
 	account, err := wallet.AccountByPublicKey(publicKey)
 	if err != nil {
-		if err == wallet_hd.ErrAccountNotFound {
+		if err == hd.ErrAccountNotFound {
 			return b.notFoundResponse()
 		}
 
@@ -405,7 +406,7 @@ func (b *backend) pathSignAggregation(ctx context.Context, req *logical.Request,
 
 	account, err := wallet.AccountByPublicKey(publicKey)
 	if err != nil {
-		if err == wallet_hd.ErrAccountNotFound {
+		if err == hd.ErrAccountNotFound {
 			return b.notFoundResponse()
 		}
 

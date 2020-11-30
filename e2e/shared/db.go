@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/bloxapp/eth2-key-manager/wallets/hd"
+
 	"github.com/bloxapp/eth2-key-manager/core"
 	"github.com/bloxapp/eth2-key-manager/stores/in_memory"
-	"github.com/bloxapp/eth2-key-manager/wallet_hd"
 	"github.com/stretchr/testify/require"
 	types "github.com/wealdtech/go-eth2-types/v2"
 )
@@ -28,7 +29,7 @@ func BaseInmemStorage(t *testing.T, minimalSlashingData bool) (*in_memory.InMemS
 	require.NoError(t, err)
 
 	// wallet
-	wallet := wallet_hd.NewHDWallet(&core.WalletContext{Storage: store})
+	wallet := hd.NewHDWallet(&core.WalletContext{Storage: store})
 	if err := store.SaveWallet(wallet); err != nil {
 		return nil, err
 	}
