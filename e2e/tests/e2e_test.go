@@ -23,6 +23,7 @@ var tests = []E2E{
 	&AggregationDoubleSigning{},
 	&AggregationConcurrentSigning{},
 	&AggregationSigningAccountNotFound{},
+	&RandaoReferenceSigning{},
 
 	// Proposal signing
 	&ProposalSigning{},
