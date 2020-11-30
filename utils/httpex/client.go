@@ -1,9 +1,11 @@
 package httpex
 
 import (
+	"crypto/tls"
 	"net/http"
 	"time"
 
+	"github.com/hashicorp/go-cleanhttp"
 	"github.com/hashicorp/go-retryablehttp"
 	"github.com/sirupsen/logrus"
 )
@@ -27,7 +29,20 @@ func CreateClient(logger *logrus.Entry, errorHandler retryablehttp.ErrorHandler)
 	retryClient.Logger = logger
 	retryClient.ErrorHandler = errorHandler
 
-	client := retryClient.StandardClient()
+	// Override transport to support non-authorized HTTPS connections
+	transport := cleanhttp.DefaultPooledTransport()
+	transport.TLSClientConfig = &tls.Config{
+		InsecureSkipVerify: true,
+	}
+	retryClient.HTTPClient = &http.Client{
+		Transport: transport,
+	}
+
+	client := &http.Client{
+		Transport: &retryablehttp.RoundTripper{
+			Client: retryClient,
+		},
+	}
 	client.Timeout = clientTimeout
 
 	return client
