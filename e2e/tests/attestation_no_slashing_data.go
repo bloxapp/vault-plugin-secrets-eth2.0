@@ -27,7 +27,7 @@ func (test *AttestationNoSlashingDataSigning) Run(t *testing.T) {
 	setup := e2e.Setup(t)
 
 	// setup vault with db
-	storage := setup.UpdateStorage(t, core.PyrmontNetwork, false)
+	storage := setup.UpdateStorage(t, core.PyrmontNetwork, false, core.HDWallet, nil)
 	account := shared.RetrieveAccount(t, storage)
 	require.NotNil(t, account)
 	pubKeyBytes := account.ValidatorPublicKey().Marshal()

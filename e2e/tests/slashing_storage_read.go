@@ -32,7 +32,7 @@ func (test *SlashingStorageRead) Run(t *testing.T) {
 	setup := e2e.Setup(t)
 
 	// setup vault with db
-	storage := setup.UpdateStorage(t, core.PyrmontNetwork, true)
+	storage := setup.UpdateStorage(t, core.PyrmontNetwork, true, core.HDWallet, nil)
 	account := shared.RetrieveAccount(t, storage)
 	require.NotNil(t, account)
 	pubKey := hex.EncodeToString(account.ValidatorPublicKey().Marshal())

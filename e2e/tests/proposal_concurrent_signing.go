@@ -27,7 +27,7 @@ func (test *ProposalConcurrentSigning) Run(t *testing.T) {
 	setup := e2e.Setup(t)
 
 	// setup vault with db
-	store := setup.UpdateStorage(t, core.PyrmontNetwork, true)
+	store := setup.UpdateStorage(t, core.PyrmontNetwork, true, core.HDWallet, nil)
 	account := shared.RetrieveAccount(t, store)
 	pubKey := hex.EncodeToString(account.ValidatorPublicKey().Marshal())
 

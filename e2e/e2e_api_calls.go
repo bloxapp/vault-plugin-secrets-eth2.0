@@ -239,9 +239,9 @@ func (setup *BaseSetup) ReadSlashingStorage(t *testing.T, network core.Network) 
 }
 
 // UpdateStorage updates the storage.
-func (setup *BaseSetup) UpdateStorage(t *testing.T, network core.Network, minimalSlashingData bool) *in_memory.InMemStore {
+func (setup *BaseSetup) UpdateStorage(t *testing.T, network core.Network, minimalSlashingData bool, walletType core.WalletType, privKey []byte) *in_memory.InMemStore {
 	// get store
-	store, err := shared.BaseInmemStorage(t, minimalSlashingData)
+	store, err := shared.BaseInmemStorage(t, minimalSlashingData, walletType, privKey)
 	require.NoError(t, err)
 
 	// encode store

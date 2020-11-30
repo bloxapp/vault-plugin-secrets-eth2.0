@@ -10,35 +10,36 @@ type E2E interface {
 }
 
 var tests = []E2E{
-	// Attestation signing
-	&AttestationSigning{},
-	&AttestationSigningAccountNotFound{},
-	&AttestationDoubleSigning{},
-	&AttestationConcurrentSigning{},
-	&AttestationFarFutureSigning{},
-	&AttestationNoSlashingDataSigning{},
-
-	// Aggregation signing
-	&AggregationSigning{},
-	&AggregationDoubleSigning{},
-	&AggregationConcurrentSigning{},
-	&AggregationSigningAccountNotFound{},
+	//// Attestation signing
+	//&AttestationSigning{},
+	//&AttestationSigningAccountNotFound{},
+	//&AttestationDoubleSigning{},
+	//&AttestationConcurrentSigning{},
+	//&AttestationFarFutureSigning{},
+	//&AttestationNoSlashingDataSigning{},
+	//
+	//// Aggregation signing
+	//&AggregationSigning{},
+	//&AggregationDoubleSigning{},
+	//&AggregationConcurrentSigning{},
+	//&AggregationSigningAccountNotFound{},
 
 	//Proposal signing
-	&ProposalSigning{},
-	&ProposalDoubleSigning{},
-	&ProposalConcurrentSigning{},
-	&ProposalSigningAccountNotFound{},
-	&ProposalFarFutureSigning{},
+	//&ProposalSigning{},
+	//&ProposalDoubleSigning{},
+	//&ProposalConcurrentSigning{},
+	//&ProposalSigningAccountNotFound{},
+	//&ProposalFarFutureSigning{},
+	&ProposalReferenceSigning{},
 
-	// Accounts tests
-	&AccountsList{},
-
-	// Config tests
-	&ConfigRead{},
-
-	// Storage tests
-	&SlashingStorageRead{},
+	//// Accounts tests
+	//&AccountsList{},
+	//
+	//// Config tests
+	//&ConfigRead{},
+	//
+	//// Storage tests
+	//&SlashingStorageRead{},
 }
 
 func TestE2E(t *testing.T) {
