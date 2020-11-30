@@ -6,10 +6,9 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/bloxapp/eth2-key-manager/wallets/hd"
-
 	"github.com/bloxapp/eth2-key-manager/core"
 	"github.com/bloxapp/eth2-key-manager/stores/in_memory"
+	"github.com/bloxapp/eth2-key-manager/wallets/hd"
 	uuid "github.com/google/uuid"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/stretchr/testify/require"

@@ -5,14 +5,11 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/bloxapp/eth2-key-manager/wallets/hd"
-
-	"github.com/bloxapp/eth2-key-manager/wallets/nd"
-
-	"github.com/bloxapp/eth2-key-manager/wallets"
-
 	"github.com/bloxapp/eth2-key-manager/core"
 	"github.com/bloxapp/eth2-key-manager/stores/in_memory"
+	"github.com/bloxapp/eth2-key-manager/wallets"
+	"github.com/bloxapp/eth2-key-manager/wallets/hd"
+	"github.com/bloxapp/eth2-key-manager/wallets/nd"
 	"github.com/stretchr/testify/require"
 	types "github.com/wealdtech/go-eth2-types/v2"
 )

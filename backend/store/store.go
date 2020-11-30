@@ -5,12 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/bloxapp/eth2-key-manager/wallets"
-	"github.com/bloxapp/eth2-key-manager/wallets/hd"
-
 	"github.com/bloxapp/eth2-key-manager/core"
 	"github.com/bloxapp/eth2-key-manager/encryptor"
 	"github.com/bloxapp/eth2-key-manager/stores/in_memory"
+	"github.com/bloxapp/eth2-key-manager/wallets"
+	"github.com/bloxapp/eth2-key-manager/wallets/hd"
 	"github.com/google/uuid"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/pkg/errors"

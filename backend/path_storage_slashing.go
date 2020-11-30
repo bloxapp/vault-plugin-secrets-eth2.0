@@ -6,10 +6,9 @@ import (
 	"encoding/json"
 	"sync"
 
-	"github.com/bloxapp/eth2-key-manager/wallets/hd"
-
 	vault "github.com/bloxapp/eth2-key-manager"
 	"github.com/bloxapp/eth2-key-manager/core"
+	"github.com/bloxapp/eth2-key-manager/wallets/hd"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/pkg/errors"

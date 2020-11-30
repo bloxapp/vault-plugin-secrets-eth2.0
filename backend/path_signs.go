@@ -4,11 +4,10 @@ import (
 	"context"
 	"encoding/hex"
 
-	"github.com/bloxapp/eth2-key-manager/wallets/hd"
-
 	vault "github.com/bloxapp/eth2-key-manager"
 	"github.com/bloxapp/eth2-key-manager/slashing_protection"
 	"github.com/bloxapp/eth2-key-manager/validator_signer"
+	"github.com/bloxapp/eth2-key-manager/wallets/hd"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/pkg/errors"

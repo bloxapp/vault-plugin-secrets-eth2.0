@@ -32,8 +32,8 @@ require (
 	github.com/pborman/uuid v1.2.1
 	github.com/pierrec/lz4 v2.6.0+incompatible // indirect
 	github.com/pkg/errors v0.9.1
-	github.com/prysmaticlabs/ethereumapis v0.0.0-20201003171600-a72e5f77d233
-	github.com/prysmaticlabs/prysm v1.0.0-beta.3
+	github.com/prysmaticlabs/ethereumapis v0.0.0-20201117145913-073714f478fb
+	github.com/prysmaticlabs/prysm v1.0.2
 	github.com/sirupsen/logrus v1.6.0
 	github.com/stretchr/testify v1.6.1
 	github.com/wealdtech/eth2-signer-api v1.5.2
@@ -44,7 +44,5 @@ require (
 )
 
 replace github.com/ethereum/go-ethereum => github.com/prysmaticlabs/bazel-go-ethereum v0.0.0-20201113091623-013fd65b3791
-
-replace github.com/prysmaticlabs/prysm => github.com/prysmaticlabs/prysm v1.0.0-beta.3
 
 replace github.com/bloxapp/eth2-key-manager => github.com/bloxapp/eth2-key-manager v0.2.24-0.20201130064737-84c9b6a93f54
