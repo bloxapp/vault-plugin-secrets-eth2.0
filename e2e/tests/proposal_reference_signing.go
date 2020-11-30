@@ -5,12 +5,13 @@ import (
 	"testing"
 
 	"github.com/bloxapp/eth2-key-manager/core"
-	"github.com/bloxapp/key-vault/e2e"
 	"github.com/stretchr/testify/require"
 	v1 "github.com/wealdtech/eth2-signer-api/pb/v1"
+
+	"github.com/bloxapp/key-vault/e2e"
 )
 
-// ProposalSigning tests sign proposal endpoint.
+// ProposalReferenceSigning tests sign proposal endpoint.
 type ProposalReferenceSigning struct {
 }
 

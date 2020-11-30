@@ -52,7 +52,7 @@ func BaseInmemStorage(t *testing.T, minimalSlashingData bool, walletType core.Wa
 		if err := store.SaveWallet(wallet); err != nil {
 			return nil, err
 		}
-		acc, err = wallet.CreateValidatorAccount(NewSeed(t), nil)
+		acc, err = wallet.CreateValidatorAccount(newSeed(t), nil)
 		if err != nil {
 			return nil, err
 		}
@@ -95,7 +95,7 @@ func RetrieveAccount(t *testing.T, store core.Storage) core.ValidatorAccount {
 	return nil
 }
 
-func NewSeed(t *testing.T) []byte {
+func newSeed(t *testing.T) []byte {
 	entropy, err := core.GenerateNewEntropy()
 	require.NoError(t, err)
 
