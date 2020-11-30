@@ -15,13 +15,13 @@ require (
 	github.com/google/uuid v1.1.2
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
+	github.com/hashicorp/go-cleanhttp v0.5.1
 	github.com/hashicorp/go-hclog v0.14.1
 	github.com/hashicorp/go-multierror v1.1.0 // indirect
 	github.com/hashicorp/go-retryablehttp v0.6.8
 	github.com/hashicorp/go-rootcerts v1.0.2 // indirect
 	github.com/hashicorp/vault/api v1.0.4
 	github.com/hashicorp/vault/sdk v0.1.13
-	github.com/herumi/bls-eth-go-binary v0.0.0-20201019012252-4b463a10c225
 	github.com/makasim/sentryhook v0.3.0
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/onsi/ginkgo v1.14.1 // indirect
