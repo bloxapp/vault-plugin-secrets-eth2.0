@@ -1,4 +1,6 @@
 # key-vault
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fbloxapp%2Fkey-vault.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fbloxapp%2Fkey-vault?ref=badge_shield)
+
 
 ## How to use this project?
 
@@ -377,3 +379,6 @@ New networks could be defined by the following steps:
     ```
 
 2. Update policies `./policies/admin-policy.hcl` and `./policies/signer-policy.hcl` by adding a definition with a new network in the path. 
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fbloxapp%2Fkey-vault.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fbloxapp%2Fkey-vault?ref=badge_large)
