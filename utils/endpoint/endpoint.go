@@ -1,6 +1,10 @@
 package endpoint
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/pkg/errors"
+)
 
 const (
 	// BasePath is the base path for all endpoints.
@@ -13,5 +17,5 @@ func Build(network, pattern string) (string, error) {
 		return fmt.Sprintf("%s/%s/%s", BasePath, network, pattern), nil
 	}
 
-	return "", fmt.Errorf("netowrk is not defined")
+	return "", errors.New("netowrk is not defined")
 }

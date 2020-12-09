@@ -2,7 +2,6 @@ package backend
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/bloxapp/eth2-key-manager/core"
 	"github.com/hashicorp/vault/sdk/framework"
@@ -102,7 +101,7 @@ func (b *backend) readConfig(ctx context.Context, s logical.Storage) (*Config, e
 	}
 
 	if entry == nil {
-		return nil, fmt.Errorf("the plugin has not been configured yet")
+		return nil, errors.Errorf("the plugin has not been configured yet")
 	}
 
 	var result Config

@@ -149,7 +149,7 @@ func (store *HashicorpVaultStore) OpenWallet() (core.Wallet, error) {
 
 	// Return nothing if there is no record
 	if entry == nil {
-		return nil, fmt.Errorf("wallet not found")
+		return nil, errors.New("wallet not found")
 	}
 
 	var ret hd.HDWallet

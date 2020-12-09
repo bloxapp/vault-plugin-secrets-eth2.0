@@ -2,7 +2,6 @@ package backend
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/hashicorp/vault/sdk/framework"
@@ -62,7 +61,7 @@ func (b *backend) pathExistenceCheck(ctx context.Context, req *logical.Request, 
 	out, err := req.Storage.Get(ctx, req.Path)
 	if err != nil {
 		b.Logger().Error("Path existence check failed", err)
-		return false, fmt.Errorf("existence check failed: %v", err)
+		return false, errors.Errorf("existence check failed: %v", err)
 	}
 
 	return out != nil, nil
