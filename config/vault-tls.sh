@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Create CA certificate config
 cat <<EOF > "/tmp/ca-conf.cnf"

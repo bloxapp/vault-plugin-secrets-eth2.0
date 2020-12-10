@@ -49,10 +49,13 @@ func configPaths(b *backend) []*framework.Path {
 
 // pathWriteConfig is the write config path handler
 func (b *backend) pathWriteConfig(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
-	network := data.Get("network").(string)
+	network := core.NetworkFromString(data.Get("network").(string))
+	if network == "" {
+		return nil, errors.New("invalid network provided")
+	}
 
 	configBundle := Config{
-		Network: core.NetworkFromString(network),
+		Network: network,
 	}
 
 	// Create storage entry
