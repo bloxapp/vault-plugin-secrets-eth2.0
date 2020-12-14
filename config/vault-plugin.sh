@@ -42,6 +42,19 @@ echo "Configured MainNet network"
 
 # Reload plugin
 curl --insecure --header "X-Vault-Token: $(cat /data/keys/vault.root.token)" \
-        --request PUT \
-        --data '{"plugin": "ethsign"}' \
-         ${VAULT_SERVER_SCHEMA:-http}://127.0.0.1:8200/v1/sys/plugins/reload/backend
+     --request PUT \
+     --data '{"plugin": "ethsign"}' \
+     ${VAULT_SERVER_SCHEMA:-http}://127.0.0.1:8200/v1/sys/plugins/reload/backend
+
+# Make sure everything works well
+curl --insecure \
+     --header "X-Vault-Token: $(cat /data/keys/vault.root.token)" \
+     --request GET \
+     --fail \
+     ${VAULT_SERVER_SCHEMA:-http}://127.0.0.1:8200/v1/ethereum/pyrmont/config
+
+curl --insecure \
+     --header "X-Vault-Token: $(cat /data/keys/vault.root.token)" \
+     --request GET \
+     --fail \
+     ${VAULT_SERVER_SCHEMA:-http}://127.0.0.1:8200/v1/ethereum/mainnet/config
