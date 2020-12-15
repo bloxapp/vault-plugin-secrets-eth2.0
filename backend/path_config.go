@@ -98,10 +98,8 @@ func (b *backend) pathReadConfig(ctx context.Context, req *logical.Request, data
 	options := vault.KeyVaultOptions{}
 	options.SetStorage(storage)
 	var dataStore []byte
-	portfolio, err := vault.OpenKeyVault(&options)
-	if err == nil {
-		wallet, err := portfolio.Wallet()
-		if err == nil {
+	if portfolio, err := vault.OpenKeyVault(&options); err == nil {
+		if wallet, err := portfolio.Wallet(); err == nil {
 			dataStore, _ = json.Marshal(wallet.Accounts())
 		}
 	}
