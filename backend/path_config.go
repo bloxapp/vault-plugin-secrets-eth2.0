@@ -2,6 +2,7 @@ package backend
 
 import (
 	"context"
+	"encoding/hex"
 	"encoding/json"
 
 	vault "github.com/bloxapp/eth2-key-manager"
@@ -96,22 +97,19 @@ func (b *backend) pathReadConfig(ctx context.Context, req *logical.Request, data
 	storage := store.NewHashicorpVaultStore(ctx, req.Storage, configBundle.Network)
 	options := vault.KeyVaultOptions{}
 	options.SetStorage(storage)
-
+	var dataStore []byte
 	portfolio, err := vault.OpenKeyVault(&options)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to open key vault")
+	if err == nil {
+		wallet, err := portfolio.Wallet()
+		if err == nil {
+			dataStore, _ = json.Marshal(wallet)
+		}
 	}
 
-	wallet, err := portfolio.Wallet()
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to retrieve wallet by name")
-	}
-
-	dataStore, _ := json.Marshal(wallet)
 	return &logical.Response{
 		Data: map[string]interface{}{
 			"network":   configBundle.Network,
-			"dataStore": dataStore,
+			"dataStore": hex.EncodeToString(dataStore),
 		},
 	}, nil
 }
