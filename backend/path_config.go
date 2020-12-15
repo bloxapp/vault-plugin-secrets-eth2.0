@@ -102,7 +102,7 @@ func (b *backend) pathReadConfig(ctx context.Context, req *logical.Request, data
 	if err == nil {
 		wallet, err := portfolio.Wallet()
 		if err == nil {
-			dataStore, _ = json.Marshal(wallet)
+			dataStore, _ = json.Marshal(wallet.Accounts())
 		}
 	}
 
