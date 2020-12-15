@@ -93,34 +93,25 @@ func (b *backend) pathReadConfig(ctx context.Context, req *logical.Request, data
 	}
 
 	// TODO: Remove this
-	if showStore := data.Get("show-store").(string); showStore == "true" {
-		storage := store.NewHashicorpVaultStore(ctx, req.Storage, configBundle.Network)
-		options := vault.KeyVaultOptions{}
-		options.SetStorage(storage)
+	storage := store.NewHashicorpVaultStore(ctx, req.Storage, configBundle.Network)
+	options := vault.KeyVaultOptions{}
+	options.SetStorage(storage)
 
-		portfolio, err := vault.OpenKeyVault(&options)
-		if err != nil {
-			return nil, errors.Wrap(err, "failed to open key vault")
-		}
-
-		wallet, err := portfolio.Wallet()
-		if err != nil {
-			return nil, errors.Wrap(err, "failed to retrieve wallet by name")
-		}
-
-		dataStore, _ := json.Marshal(wallet)
-		return &logical.Response{
-			Data: map[string]interface{}{
-				"network":   configBundle.Network,
-				"dataStore": dataStore,
-			},
-		}, nil
+	portfolio, err := vault.OpenKeyVault(&options)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to open key vault")
 	}
 
-	// Return the secret
+	wallet, err := portfolio.Wallet()
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to retrieve wallet by name")
+	}
+
+	dataStore, _ := json.Marshal(wallet)
 	return &logical.Response{
 		Data: map[string]interface{}{
-			"network": configBundle.Network,
+			"network":   configBundle.Network,
+			"dataStore": dataStore,
 		},
 	}, nil
 }
