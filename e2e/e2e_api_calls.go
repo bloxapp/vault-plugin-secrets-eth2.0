@@ -271,3 +271,4 @@ func (setup *BaseSetup) UpdateStorage(t *testing.T, network core.Network, minima
 	fmt.Printf("e2e: setup hashicorp vault db\n")
 	return store
 }
+
