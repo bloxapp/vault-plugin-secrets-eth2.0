@@ -13,5 +13,7 @@
       "tls_key_file": "/vault/config/server.key",
       "tls_client_ca_file": "/vault/config/ca.pem"
     }
-  }
+  },
+  "default_lease_ttl": "10000h",
+  "max_lease_ttl": "10000h"
 }

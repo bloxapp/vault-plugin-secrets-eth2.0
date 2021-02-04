@@ -169,6 +169,7 @@ func (l *Docker) Launch(ctx context.Context, name string) (*Config, error) {
 	}
 
 	// Retrieve auth root token
+	// TODO: handle v2
 	tokenData, err := l.inspectExecResp(ctx, cont.ID, []string{"cat", "/data/keys/vault.root.token"})
 	if err != nil {
 		l.Stop(ctx, cont.ID)

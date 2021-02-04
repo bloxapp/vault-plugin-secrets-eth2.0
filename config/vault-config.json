@@ -10,5 +10,7 @@
       "address": "[::]:8200",
       "tls_disable": 1
     }
-  }
+  },
+  "default_lease_ttl": "10000h",
+  "max_lease_ttl": "10000h"
 }
